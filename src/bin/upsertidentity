@@ -1,0 +1,174 @@
+#!/bin/perl -n
+use JSON;
+use Net::LDAP;
+use Net::LDAP::Entry;
+use Data::Dumper;
+use utf8;
+use Cwd qw();
+
+BEGIN: {
+        # Lecture du fichier de configuration etc/config.conf
+        sub readConfig()
+        {
+                my $self=shift;
+                my $path = Cwd::cwd();
+                $ok=open(CONF,"$path/../etc/config.conf");
+                if ( $ok != 1 )
+                {
+                        print returnCode(1,"Fichier etc/config non trouvé");
+                        exit(1);
+                }
+                %param=();
+                #lecture du fichier de conf et transformation en un tableau de parametres
+                while(<CONF>)
+                {
+                        if (/^([A-Z,a-z,0-1,-,_,\.]+)=(.+)/)
+                        {
+                                $value=$2;
+                                chomp($value);
+                                $param{$1}=$value;
+                        }
+                }
+                close(CONF);
+                return %param
+        }
+        sub makeEntryArray {
+                my $identity = shift;
+                my $attributes={};
+                $objectclasses = $identity->{'payload'}->{'identity'}->{'identity'}->{'additionalFields'}->{'objectClasses'};
+                unshift(@{$objectclasses}, ('inetOrgPerson'));
+                #preparation inetorg
+                $inetorg = $identity->{'payload'}->{'identity'}->{'identity'}->{'inetOrgPerson'};
+                foreach my $key (keys %$inetorg) {
+                       $attributes->{$key}=$inetorg->{$key};
+                }
+                #prise des additionals fields
+                $supFields = $identity->{'payload'}->{'identity'}->{'identity'}->{'additionalFields'}->{'attributes'};
+                foreach my $key (keys %$supFields ) {
+                        foreach my $key1 (keys %{$supFields->{$key}}) {
+                                if ($supFields->{$key}->{$key1} ne ""){
+                                        $attributes->{$key1}=$supFields->{$key}->{$key1};
+                                }
+                        }
+                }
+                $attributes->{'objectClass'}=$objectclasses;
+                return $attributes;
+        }
+        sub returnCode{
+                my $code=shift;
+                my $message=shift;
+                %json={};
+                if ($code > 0){
+                        $json->{'status'}=1;
+                        $json->{'message'}="Error Ldap:".$code." ".$message;
+                }else{
+                        $json->{'status'}=0;
+                        $json->{'message'}="Ldap:".$code." ".$message;
+                }
+
+                return encode_json($json);
+        }
+        sub composeDn{
+                my $personType=shift;
+                my $rdnValue=shift;
+                my $withoutRdn=shift;
+                my $branch="";
+                my @dnTab=();
+                if ($withoutRdn == 0){
+                        my $rdn=$p{'rdnattribute'}."=".$rdnValue;
+                        push(@dnTab,$rdn);
+                }
+                if ($personType eq 'etd'){
+                        if ($p{'branchForEtd'}){
+                               $branch= $p{'branchForEtd'};
+                        }
+                }elsif($personType eq 'adm'){
+                        if ($p{'branchForEtd'}){
+                                $branch= $p{'branchForAdm'};
+                        }
+                }elsif($personType eq 'esn'){
+                        if ($p{'branchForEsn'}){
+                                $branch= $p{'branchForEsn'};
+                        }
+                }
+                if ($branch ne ""){
+                        push(@dnTab,$branch);
+                }
+                push(@dnTab,$p{'userbase'});
+                return join(',',@dnTab);
+
+        }
+}
+# parse json
+my $ident=decode_json($_);
+$attrs=makeEntryArray($ident);
+#connection 
+%p=readConfig();
+# est ce que ce backend est concerné ?
+if( index($p{'backendFor'},$attrs->{$p{'branchAttr'}}) == -1){
+        print returnCode(O,"Nothing to do");
+        exit 0;
+}
+#Ouverture de la connexion LDAP
+$ldap=Net::LDAP->new($p{'host'});
+#bind 
+my $mesg=$ldap->bind($p{'dn'},password =>$p{'password'});
+if ($mesg->code() > 0)
+{
+        print returnCode($mesg->code(),$mesg->error());
+        exit 1;
+}
+#recherche si l uid existe et sont dn
+$rdnValue=$attrs->{$p{'rdnattribute'}};
+$employeeNumber=$attrs->{'employeeNumber'};
+$employeeType=$attrs->{'employeeType'};
+$x1=composeDn($attrs->{$p{'branchAttr'}},$attrs->{$p{'rdnattribute'}},0);
+$x2=composeDn($attrs->{$p{'branchAttr'}},$attrs->{$p{'rdnattribute'}},1);
+my $mesg=$ldap->search(base =>$p{'base'},scope=>2,filter=>'&(employeeNumber='.$employeeNumber.')(employeeType='.$employeeType.')');
+if ($mesg->count == 0)
+{
+        #l'entree n'existe pas on la créé
+        $dn=composeDn($attrs->{$p{'branchAttr'}},$attrs->{$p{'rdnattribute'}},0);
+        $entry=Net::LDAP::Entry->new( $dn );
+        foreach my $key (keys %$attrs) {
+              #print $key." : ".$attrs->{$key}."\n";
+              $entry->add( $key => $attrs->{$key});
+        }
+        $mesg=$ldap->add($entry);
+        print returnCode($mesg->code(),$mesg->error()." dn:".$dn);
+        if ($mesg->code() >0){
+           exit 1;
+        }else{
+        	exit 0;
+        }
+} else {
+        #prise de l entree trouvée
+        @entries=$mesg->entries();
+        $entry=@entries[0];
+        $dn=$entry->dn;
+        @dnTab=split(',',$dn);
+        shift(@dnTab);
+        $dnSuperior=join(',',@dnTab);
+        $newdnSuperior=composeDn($attrs->{$p{'branchAttr'}},$attrs->{$p{'rdnattribute'}},1);
+        # est ce qu il faut renommer le rdn ?
+        if (($entry->get_value($p{'rdnattribute'}) ne $rdnValue) or ($dnSuperior ne $newdnSuperior)){
+                # cas où l uid a été changé
+                $mesg=$ldap->moddn(dn=>$entry->dn,newrdn => $p{'rdnattribute'}."=".$rdnValue,deleteoldrdn => 1,newsuperior=>$newdnSuperior);
+                if ($mesg->code() >0){
+                        print returnCode($mesg->code(),$mesg->error()." dn:".$entry->dn);
+                        exit 1;
+                }
+                $dn=composeDn($attrs->{$p{'branchAttr'}},$attrs->{$p{'rdnattribute'}},0);
+                $entry->dn($dn);
+        }
+        foreach my $key (keys %$attrs) {
+                $entry->replace( $key => $attrs->{$key});
+        }
+        $mesg=$entry->update($ldap);
+        print returnCode($mesg->code(),$mesg->error()." dn:".$dn);
+        if ($mesg->code() >0){
+                exit 1;
+        }else{
+                exit 0;
+        }
+}

@@ -1,0 +1,21 @@
+_version: 1
+
+name: 'openldap'
+description: 'Backend for openldap'
+active: true
+actions:
+  IDENTITY_PASSWORD_CHANGE:
+    script: "changepasswd"
+    onError: 'stop'
+  IDENTITY_CREATE:
+    script: 'upsertidentity'
+    onError: 'stop'
+  IDENTITY_UPDATE:
+    script: 'upsertidentity'
+    onError: 'stop'
+  IDENTITY_DELETE:
+    script: 'dummy.sh'
+    onError: 'stop'
+  PING_TARGET:
+    script: 'dummy.sh'
+    onError: 'continue'

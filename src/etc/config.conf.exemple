@@ -1,0 +1,11 @@
+host=myldap.mydomain.com
+dn=cn=manager,cn=internal,dc=mydomain,dc=com
+password=MyPassword
+base=dc=mydomain,dc=com
+userbase=ou=peoples,dc=mydomain,dc=com
+rdnattribute=uid
+branchForEtd=ou=Etudiants
+branchForAdm=ou=Administratifs
+branchForEsn=ou=Enseignants
+branchAttr=supannTypeEntiteAffectation
+backendFor=adm,etd,esn
