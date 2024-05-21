@@ -5,8 +5,8 @@ Bakend LDAP pour Sesame
 LA configuration se fait dans etc/config.conf
 
 ```
-# host lDAP
-host=myldap.mydomain.com
+# host lDAP (peut etre noté sous forme URI si seulement l'adresse est renseignée LDAP sur port 389
+host=ldaps://myldap.mydomain.com:636
 # Dn de connection (doit avoir les droits d'ecriture sur le Ldap)
 dn=cn=manager,cn=internal,dc=mydomain,dc=com
 # mot de passe du DN ci dessus

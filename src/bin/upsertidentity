@@ -5,13 +5,13 @@ use Net::LDAP::Entry;
 use Data::Dumper;
 use utf8;
 use Cwd qw();
-
+use File::Basename;
 BEGIN: {
         # Lecture du fichier de configuration etc/config.conf
         sub readConfig()
         {
                 my $self=shift;
-                my $path = Cwd::cwd();
+                my $path = dirname(__FILE__);
                 $ok=open(CONF,"$path/../etc/config.conf");
                 if ( $ok != 1 )
                 {

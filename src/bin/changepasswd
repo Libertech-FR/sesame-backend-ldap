@@ -1,16 +1,17 @@
 #!/bin/perl -n
 use JSON;
 use Net::LDAP;
+use File::Basename;
 BEGIN: {
     # Lecture du fichier de configuration etc/config.conf
     sub readConfig()
     {
         my $self=shift;
-        my $path = Cwd::cwd();
+        my $path = basename(__FILE__);
         $ok=open(CONF,"$path/../etc/config.conf");
         if ( $ok != 1 )
         {
-            print returnCode(1,"Fichier etc/config non trouvé");
+            print returnCode(1,"Fichier $path/etc/config.conf non trouvé");
             exit(1);
         }
         %param=();
