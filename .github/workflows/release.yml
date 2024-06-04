@@ -17,8 +17,8 @@ jobs:
           cp src/bin/* .debpkg/var/lib/backends/01openldap/bin
           cp src/etc/config.conf.exemple .debpkg/var/lib/backends/01openldap/etc
           cp src/config.yml .debpkg/var/lib/backends/01openldap
-     - uses: jiro4989/build-deb-action@v3
-       with:
+      - uses: jiro4989/build-deb-action@v3
+        with:
            package: sesame-backend-openldap
            package_root: .debpkg
            maintainer: Libertech
