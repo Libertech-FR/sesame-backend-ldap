@@ -15,7 +15,7 @@ BEGIN: {
                 $ok=open(CONF,"$path/../etc/config.conf");
                 if ( $ok != 1 )
                 {
-                        print returnCode(1,"Fichier etc/config non trouvé");
+                        print returnCode(1,"Fichier $path/../etc/config.conf non trouvé");
                         exit(1);
                 }
                 %param=();
@@ -122,8 +122,6 @@ if ($mesg->code() > 0)
 $rdnValue=$attrs->{$p{'rdnattribute'}};
 $employeeNumber=$attrs->{'employeeNumber'};
 $employeeType=$attrs->{'employeeType'};
-$x1=composeDn($attrs->{$p{'branchAttr'}},$attrs->{$p{'rdnattribute'}},0);
-$x2=composeDn($attrs->{$p{'branchAttr'}},$attrs->{$p{'rdnattribute'}},1);
 my $mesg=$ldap->search(base =>$p{'base'},scope=>2,filter=>'&(employeeNumber='.$employeeNumber.')(employeeType='.$employeeType.')');
 if ($mesg->count == 0)
 {
@@ -132,7 +130,10 @@ if ($mesg->count == 0)
         $entry=Net::LDAP::Entry->new( $dn );
         foreach my $key (keys %$attrs) {
               #print $key." : ".$attrs->{$key}."\n";
-              $entry->add( $key => $attrs->{$key});
+              if (defined $attrs->{$key}){
+                $entry->add( $key => $attrs->{$key});
+              }
+              
         }
         $mesg=$ldap->add($entry);
         print returnCode($mesg->code(),$mesg->error()." dn:".$dn);
@@ -162,7 +163,14 @@ if ($mesg->count == 0)
                 $entry->dn($dn);
         }
         foreach my $key (keys %$attrs) {
-                $entry->replace( $key => $attrs->{$key});
+                #print $key." : ".$attrs->{$key}."\n";
+                if (defined $attrs->{$key}){
+                     $entry->replace( $key => $attrs->{$key});   
+                }else{
+                     if ($entry->exists($key)){
+                        $entry->delete($key);  
+                     }       
+                }
         }
         $mesg=$entry->update($ldap);
         print returnCode($mesg->code(),$mesg->error()." dn:".$dn);

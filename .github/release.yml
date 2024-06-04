@@ -1,0 +1,36 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: copy sources
+        run: |
+          mkdir -p .debpkg/var/lib/backends/01openldap/etc
+          mkdir -p .debpkg/var/lib/backends/01openldap/bin
+          cp src/bin/* .debpkg/var/lib/backends/01openldap/bin
+          cp src/etc/config.conf.exemple .debpkg/var/lib/backends/01openldap/etc
+          cp src/config.yml .debpkg/var/lib/backends/01openldap
+     - uses: jiro4989/build-deb-action@v3
+       with:
+           package: sesame-backend-openldap
+           package_root: .debpkg
+           maintainer: Libertech
+           version: ${{ github.ref }} # refs/tags/v*.*.*
+           arch: 'amd64'
+           depends: 'libnet-ldap-perl, libjson-perl, sesame-daemon'
+           desc: 'LDAP backend for sesame-daemon'
+           homepage: 'https://github.com/Libertech-FR/sesame-backend-ldap'
+      - uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: sesame*
+          tag: ${{ env.NEW_VERSION }}
+          overwrite: true
+          file_glob: true

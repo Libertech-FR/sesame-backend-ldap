@@ -46,7 +46,6 @@ sub readConfig()
 }
 my $params=decode_json($_);
 $uid=$params->{'payload'}->{'uid'};
-$oldPassword=$params->{'payload'}->{'oldPassword'};
 $newPassword=$params->{'payload'}->{'newPassword'};
 #connection 
 %p=readConfig();
@@ -67,25 +66,6 @@ if ($mesg->count == 0)
         print returnCode($mesg->code(),$mesg->error());
         exit 1;
 }
-# est ce que ce backend gere cette population 
-@dp=$mesg->entry(0)->get_value('departmentNumber');
-foreach $rec (@dp){
-	if( index($p{'backendFor'},$rec) == -1){
-        	print returnCode(O,"Nothing to do");
-        	exit 0;
-	}
-}
-
-my $myDn=$mesg->entry(0)->dn();
-#rebind du dn pour verifier son mdp 
-my $mesg=$ldap->bind($myDn,password =>$oldPassword);
-if ($mesg->code() > 0)
-{
-       print returnCode($mesg->code(),$mesg->error());
-        exit 1;
-}
-#Ok la connexion est bonne on change le mot de passe
-my $mesg=$ldap->search(base =>$myDn,scope=>0,filter=>"objectclass=*");
 $entry=$mesg->entry(0);
 $entry->replace("userPassword" => $newPassword);
 $mesg=$entry->update($ldap);

@@ -1,6 +1,12 @@
 # sesame-backend-ldap
 Bakend LDAP pour Sesame
+## Installation 
 
+Le backend LDAP est ecrit en perl et a besoin : 
+```
+#apt-get install libnet-ldap-perl
+#apt-get install libjson-perl
+```
 ## Configuration 
 LA configuration se fait dans etc/config.conf
 
