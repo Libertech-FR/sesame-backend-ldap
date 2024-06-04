@@ -12,11 +12,11 @@ jobs:
       - uses: actions/checkout@v2
       - name: copy sources
         run: |
-          mkdir -p .debpkg/var/lib/backends/01openldap/etc
-          mkdir -p .debpkg/var/lib/backends/01openldap/bin
-          cp src/bin/* .debpkg/var/lib/backends/01openldap/bin
-          cp src/etc/config.conf.exemple .debpkg/var/lib/backends/01openldap/etc
-          cp src/config.yml .debpkg/var/lib/backends/01openldap
+          mkdir -p .debpkg/var/lib/sesame-daemon/backends/01openldap/etc
+          mkdir -p .debpkg/var/lib/sesame-daemon/backends/01openldap/bin
+          cp src/bin/* .debpkg/var/lib/sesame-daemon/backends/01openldap/bin
+          cp src/etc/config.conf.exemple .debpkg/var/lib/sesame-daemon/backends/01openldap/etc
+          cp src/config.yml .debpkg/var/lib/sesame-daemon/backends/01openldap
       - uses: jiro4989/build-deb-action@v3
         with:
            package: sesame-backend-openldap
