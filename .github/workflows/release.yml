@@ -12,11 +12,14 @@ jobs:
       - uses: actions/checkout@v2
       - name: copy sources
         run: |
-          mkdir -p .debpkg/var/lib/sesame-daemon/backends/01openldap/etc
-          mkdir -p .debpkg/var/lib/sesame-daemon/backends/01openldap/bin
-          cp src/bin/* .debpkg/var/lib/sesame-daemon/backends/01openldap/bin
-          cp src/etc/config.conf.exemple .debpkg/var/lib/sesame-daemon/backends/01openldap/etc
-          cp src/config.yml .debpkg/var/lib/sesame-daemon/backends/01openldap
+          mkdir -p .debpkg/var/lib/sesame-daemon/backends-modules/openldap/etc
+          mkdir -p .debpkg/var/lib/sesame-daemon/backends-modules/openldap/bin
+          cp src/bin/* .debpkg/var/lib/sesame-daemon/backends-modules/openldap/bin
+          cp src/lib/* .debpkg/var/lib/sesame-daemon/backends-modules/openldap/bin
+          cp src/etc/config.conf.exemple .debpkg/var/lib/sesame-daemon/backends-modules/openldap/etc
+          cp src/config.yml .debpkg/var/lib/sesame-daemon/backends-modules/openldap
+          cp README.md .debpkg/var/lib/sesame-daemon/backends-modules/openldap
+          cp install.sh .debpkg/var/lib/sesame-daemon/backends-modules/openldap
       - uses: jiro4989/build-deb-action@v3
         with:
            package: sesame-backend-openldap
@@ -24,7 +27,7 @@ jobs:
            maintainer: Libertech
            version: ${{ github.ref }} # refs/tags/v*.*.*
            arch: 'amd64'
-           depends: 'libnet-ldap-perl, libjson-perl, sesame-daemon'
+           depends: 'python3, python3-ldap, sesame-daemon'
            desc: 'LDAP backend for sesame-daemon'
            homepage: 'https://github.com/Libertech-FR/sesame-backend-ldap'
       - uses: svenstaro/upload-release-action@v2
