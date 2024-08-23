@@ -1,2 +1,7 @@
 
 .DS_Store
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/*
+src/etc/config.conf
+/tests
+/src/lib/__pycache__

@@ -5,20 +5,20 @@ description: 'Backend for openldap'
 active: false
 actions:
   IDENTITY_PASSWORD_CHANGE:
-    script: "changepasswd"
+    script: "changepwd.py"
     onError: 'stop'
   IDENTITY_PASSWORD_RESET:
-    script: "resetpasswd"
+    script: "resetpwd.py"
     onError: 'stop'
   IDENTITY_CREATE:
-    script: 'upsertidentity'
+    script: 'upsertidentity.py'
     onError: 'stop'
   IDENTITY_UPDATE:
-    script: 'upsertidentity'
+    script: 'upsertidentity.py'
     onError: 'stop'
   IDENTITY_DELETE:
-    script: 'dummy.sh'
+    script: 'delentity.py'
     onError: 'stop'
   PING_TARGET:
-    script: 'dummy.sh'
-    onError: 'continue'
+    script: 'ping.py'
+    onError: 'stop'
