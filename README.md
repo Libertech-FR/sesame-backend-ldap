@@ -2,10 +2,10 @@
 Bakend LDAP pour Sesame
 ## Installation 
 
-Le backend LDAP est ecrit en perl et a besoin : 
+Le backend LDAP est ecrit en python  : 
 ```
-#apt-get install libnet-ldap-perl
-#apt-get install libjson-perl
+#apt-get install sesame-backend-openldap
+
 ```
 ## Configuration 
 LA configuration se fait dans etc/config.conf
@@ -33,4 +33,14 @@ branchForEsn=ou=Enseignants
 branchAttr=supannTypeEntiteAffectation
 # Backend pour ces populations (séparée par des virgules)
 backendFor=adm,etd,esn
+```
+
+## Activation 
+l'activation ou la desactivation du backends est paramétrée dans le fichier config.yml
+
+```
+name: 'openldap'
+description: 'Backend for openldap'
+active: true <= true ou false
+```
 

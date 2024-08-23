@@ -2,7 +2,7 @@ _version: 1
 
 name: 'openldap'
 description: 'Backend for openldap'
-active: false
+active: true
 actions:
   IDENTITY_PASSWORD_CHANGE:
     script: "changepwd.py"
