@@ -14,8 +14,10 @@ jobs:
         run: |
           mkdir -p .debpkg/var/lib/sesame-daemon/backends-modules/openldap/etc
           mkdir -p .debpkg/var/lib/sesame-daemon/backends-modules/openldap/bin
+          mkdir -p .debpkg/var/lib/sesame-daemon/backends-modules/openldap/lib
           cp src/bin/* .debpkg/var/lib/sesame-daemon/backends-modules/openldap/bin
-          cp src/lib/* .debpkg/var/lib/sesame-daemon/backends-modules/openldap/bin
+          chmod 700 .debpkg/var/lib/sesame-daemon/backends-modules/openldap/bin/*
+          cp src/lib/* .debpkg/var/lib/sesame-daemon/backends-modules/openldap/lib
           cp src/etc/config.conf.exemple .debpkg/var/lib/sesame-daemon/backends-modules/openldap/etc
           cp src/config.yml .debpkg/var/lib/sesame-daemon/backends-modules/openldap
           cp README.md .debpkg/var/lib/sesame-daemon/backends-modules/openldap

@@ -4,6 +4,7 @@ password=MyPassword
 base=dc=mydomain,dc=com
 userbase=ou=peoples,dc=mydomain,dc=com
 rdnattribute=uid
+excludedObjectclasses=isly,dummy
 branchForEtd=ou=Etudiants
 branchForAdm=ou=Administratifs
 branchForEsn=ou=Enseignants

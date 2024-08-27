@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import sys
-sys.path.insert(0, '../lib')
-import backend_utils as u
+sys.path.append('../lib')
+import backend_ldap_utils as u
 
 def main():
     json=u.readjsoninput()

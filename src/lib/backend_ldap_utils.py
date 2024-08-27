@@ -78,8 +78,11 @@ def make_entry_array(entity):
         data[k]=str(v)
 
     for obj in objectclasses:
-        for k,v in additionalFields[obj].items():
-            data[k]=str(v)
+        #recherche si l objectclass est exclu
+        exclusions=config('excludedObjectclasses').lower()
+        if exclusions.find(obj.lower()) == -1:
+            for k,v in additionalFields[obj].items():
+                data[k]=str(v)
     return data
 
 

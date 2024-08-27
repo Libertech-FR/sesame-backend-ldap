@@ -38,6 +38,7 @@ echo "password=${PASSWORD}" >> ${CONFFILE}
 echo "base=${BASE}" >> ${CONFFILE}
 echo "userbase=${USERBASE},${BASE}" >> ${CONFFILE}
 echo "rdnattribute=${RDN}" >> ${CONFFILE}
+echo "backendFor=etd,adm,esn" >> ${CONFFILE}
 chmod 600 ${CONFFILE}
 systemctl restart sesame-daemon
 echo "Vous pouvez completer le fichier de configuration avec les parametres optionnels (voir README.md)"
