@@ -19,14 +19,14 @@ chmod 700 $INSTALL/bin/*
 mkdir $INSTALL/lib
 PWD=`pwd`
 cp ./lib/__init__.py $INSTALL/lib
-ln -s $PWD/lib/backend_utils.py $INSTALL/lib/backend_utils.py
+ln -s $PWD/lib/backend_ldap_utils.py $INSTALL/lib/backend_ldap_utils.py
 cp config.yml $INSTALL
 
 echo "Le backend a été installé dans $INSTALL"
 echo "Configuration"
 read -p "Url du serveur ldap (ldap[s]://FDQN:PORT : " HOST
 read -p "Dn d'authentification (doit avoir les droits d'ecriture) : " DN
-read -p "Mot de passe : " PASSWORD
+read -s -p "Mot de passe : " PASSWORD
 read -p "Base ldap : " BASE
 read -p "Branche pour les utilisateurs ex: ou=peoples : " USERBASE
 read -p "Attribut pour le Rdn : "  RDN
