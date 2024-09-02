@@ -13,16 +13,21 @@ fi
 echo "Copie des fichiers dans ${INSTALL}"
 mkdir $INSTALL/etc
 cp  ./etc/* $INSTALL/etc
+
 mkdir $INSTALL/bin
-cp ./bin/* $INSTALL/bin
-chmod 700 $INSTALL/bin/*
 mkdir $INSTALL/lib
 PWD=`pwd`
 cp ./lib/__init__.py $INSTALL/lib
 ln -s $PWD/lib/backend_ldap_utils.py $INSTALL/lib/backend_ldap_utils.py
+ln -s $PWD/bin/changepwd.py $INSTALL/bin/changepwd.py
+ln -s $PWD/bin/ping.py $INSTALL/bin/ping.py
+ln -s $PWD/bin/resetpwd.py $INSTALL/bin/resetpwd.py
+ln -s $PWD/bin/upsertidentity.py $INSTALL/bin/upsertidentity.py
+ln -s $PWD/bin/delentity.py $INSTALL/bin/delentity.py
+chmod 700 $INSTALL/bin/*
 cp config.yml $INSTALL
-
 echo "Le backend a été installé dans $INSTALL"
+
 echo "Configuration"
 read -p "Url du serveur ldap (ldap[s]://FDQN:PORT : " HOST
 read -p "Dn d'authentification (doit avoir les droits d'ecriture) : " DN
