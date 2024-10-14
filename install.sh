@@ -4,12 +4,16 @@ echo "La position determinera l'ordre d'execution des backends (comme dans init.
 read -p "Numero de demarrage du module (2 positions):" NUM
 echo "installation dans backends/${NUM}openldap"
 INSTALL=../../backends/${NUM}openldap
-if [  -d ../../backends/${NUM}openldap ];then
-   echo "Repertoire deja existant choisissez un autre numéro"
-   exit 1
-else
-   mkdir ../../backends/${NUM}openldap
+BACKEND=openldap
+if [  -d ../../backends/${NUM}${BACKEND} ];then
+   read -p "Repertoire déjà existant voulez vous l'écraser ? (O/N)" -i "N" REPONSE
+   if [ "$REPONSE" = "O" ];then
+     rm -rf ../../backends/${NUM}${BACKEND}
+   else
+     exit 1
+   fi
 fi
+mkdir ../../backends/${NUM}${BACKEND}
 echo "Copie des fichiers dans ${INSTALL}"
 mkdir $INSTALL/etc
 cp  ./etc/* $INSTALL/etc
