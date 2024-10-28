@@ -43,13 +43,13 @@ def returncode(code,message):
 
 def is_backend_concerned(entity):
     peopleType=find_key(entity,config('branchAttr'))
-    listBackend=config('backendFor')
     if type(peopleType) is list:
-        peopleType=peopleType[0]
-    if (listBackend.find(peopleType) == -1):
-        return False
+        listBackend=config('backendFor')
+        for v in peopleType:
+          peopleType=v
+          if (listBackend.find(peopleType) == -1):
+             return False
     return True
-
 def find_key(element, key):
     '''
     Check if *keys (nested) exists in `element` (dict).
@@ -268,7 +268,7 @@ def delete_entity(l,entity):
         # trouvé
         try:
             l.delete_s(r[0][0])
-            return returncode(0, "Password for " + r[0][0] + " deleted")
+            return returncode(0, "user : " + r[0][0] + " deleted")
         except ldap.LDAPError as e:
             e_dict = e.args[0]
             print(returncode(1, str(e_dict.get("result")) + ' ' + e_dict.get("desc")))

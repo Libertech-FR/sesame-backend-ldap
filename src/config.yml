@@ -19,6 +19,10 @@ actions:
   IDENTITY_DELETE:
     script: 'delentity.py'
     onError: 'stop'
+  IDENTITY_ENABLE:
+    script: 'activation.py --active 1'
+  IDENTITY_DISABLE:
+    script: 'activation.py --active 0'
   PING_TARGET:
     script: 'ping.py'
     onError: 'stop'
