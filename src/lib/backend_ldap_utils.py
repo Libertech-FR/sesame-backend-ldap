@@ -273,5 +273,7 @@ def delete_entity(l,entity):
             e_dict = e.args[0]
             print(returncode(1, str(e_dict.get("result")) + ' ' + e_dict.get("desc")))
             exit(1)
-
+    else:
+        print(returncode(1, "User not found"))
+        exit(1)
 
