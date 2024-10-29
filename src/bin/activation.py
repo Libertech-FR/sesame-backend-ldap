@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import sys
 sys.path.append('../lib')
 import backend_ldap_utils as u
