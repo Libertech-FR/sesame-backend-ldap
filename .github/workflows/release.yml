@@ -30,7 +30,7 @@ jobs:
            maintainer: Libertech
            version: ${{ github.ref }} # refs/tags/v*.*.*
            arch: 'amd64'
-           depends: 'python3, python3-ldap, sesame-daemon'
+           depends: 'python3, python3-ldap, python3-jinja2, sesame-daemon'
            desc: 'LDAP backend for sesame-daemon'
            homepage: 'https://github.com/Libertech-FR/sesame-backend-ldap'
       - uses: svenstaro/upload-release-action@v2

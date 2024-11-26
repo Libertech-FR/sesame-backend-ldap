@@ -229,7 +229,7 @@ def upsert_entry(l,entity):
             l.add_s(dn, ldif)
         except ldap.LDAPError as e:
             e_dict = e.args[0]
-            print(returncode(1, str(e_dict.get("result")) + ' ' + e_dict.get("desc") + " "+ e_dict.get("info")))
+            print(returncode(1, "add " + str(e_dict.get("result")) + ' ' + e_dict.get("desc") + " "+ e_dict.get("info",'')))
             exit(1)
     else:
         if len(r) > 1:
@@ -250,7 +250,7 @@ def upsert_entry(l,entity):
                 l.modify_s(r[0][0],ldif)
             except ldap.LDAPError as e:
                 e_dict = e.args[0]
-                print(returncode(1, 'mod ' + str(e_dict.get("result")) + ' ' + e_dict.get("desc") + " "+ e_dict.get("info")))
+                print(returncode(1, 'mod ' + str(e_dict.get("result")) + ' ' + e_dict.get("desc") + " "+ e_dict.get("info",'')))
                 exit(1)
         else:
             ## changement du DN
