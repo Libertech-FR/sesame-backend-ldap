@@ -172,10 +172,16 @@ def compose_dn(entity):
     data['rdnValue']=rdnValue
     if branchAttr != '':
         branchValue=find_key(entity,branchAttr)
+        t=type(branchValue)
+        if type(branchValue) == list:
+            branchValue=branchValue[0]
         key_branch='branchFor' + branchValue
         branch=config(key_branch,'')
         data['branch']=branch
-        template_string = '{{ config.rdnattribute}}={{rdnValue}},{{ branch }},{{ config.userbase }}'
+        if branch != '':
+            template_string = '{{ config.rdnattribute}}={{rdnValue}},{{ branch }},{{ config.userbase }}'
+        else:
+            template_string = '{{config.rdnattribute}}={{ rdnValue}},{{ config.userbase }}'
     else:
         if config('userbase','') != '':
             template_string ='{{config.rdnattribute}}={{ rdnValue}},{{ config.userbase }}'
@@ -258,10 +264,11 @@ def upsert_entry(l,entity):
             rdn=get_rdn_attribure(oldDn)
             rdnValue=entry[rdn][0].decode('UTF-8')
             new_rdn=rdn +"="+rdnValue
+
             newSuperior=dn_superior(compose_dn(entity))
             try:
                 action="rename"
-                l.rename_s(oldDn,new_rdn,newSuperior)
+                l.rename_s(oldDn,new_rdn,newsuperior=newSuperior)
             except ldap.LDAPError as e:
                 e_dict = e.args[0]
                 print(returncode(1, 'rename ' + str(e_dict.get("result")) + ' ' + e_dict.get("desc") + " "+ e_dict.get("info")))
@@ -335,10 +342,11 @@ def delete_entity(l,entity):
         exit(1)
 def complete_entry(entry,r):
     for cle,valeur in r[0][1].items():
-       if cle.lower() != 'objectclass':
+       if cle.lower() != 'objectclass' and  cle.lower() != 'jpegphoto':
             if cle not in entry:
                 if type(valeur) is list:
                     for i in valeur:
+                        w=type(i)
                         x=i.decode('UTF-8')
                     if len(x) == 1:
                         v=x[0]
