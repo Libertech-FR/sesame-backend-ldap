@@ -76,7 +76,11 @@ def make_entry_array(entity):
     if "identity" in entity['payload']:
         objectclasses = entity['payload']['identity']['identity']['additionalFields']['objectClasses']
         inetOrgPerson=entity['payload']['identity']['identity']['inetOrgPerson']
-        additionalFields=entity['payload']['identity']['identity']['additionalFields']['attributes']
+        addFieldsDict=entity['payload']['identity']['identity']['additionalFields']
+        if 'attributes' in addFieldsDict:
+            additionalFields=entity['payload']['identity']['identity']['additionalFields']['attributes']
+        else:
+            additionalFields={}
 
     else:
         objectclasses=entity['payload']['additionalFields']['objectClasses']
