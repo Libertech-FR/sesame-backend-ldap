@@ -158,7 +158,7 @@ def convert_to_utf8(entry):
 def compose_rdn(entity):
     rdn = config('rdnAttribute', 'uid')
     rdnValue = find_key(entity, rdn)
-    return rdn +'=' + rdnValue
+    return rdn + '=' + rdnValue
 def compose_dn(entity):
     """Compose the DN of a identity"""
     rdn = config('rdnAttribute', 'uid')
