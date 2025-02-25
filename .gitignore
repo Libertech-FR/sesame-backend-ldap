@@ -5,3 +5,4 @@
 src/etc/config.conf
 /tests
 /src/lib/__pycache__
+/unittest/__pycache__
