@@ -2,12 +2,13 @@
 import sys
 
 sys.path.append('../lib')
-import backend_ldap_utils as u
-
+import backend_ldap_utils as ldap
+import backend_utils as u
 def main():
-    u.readconfig('../etc/config.conf')
-    l = u.connect_ldap(u.config('host'), u.config('dn'), u.config('password'))
-    print(u.returncode(0,'server alive'))
+    config=u.read_config('../etc/config.conf')
+    ldap.set_config(config)
+    l = ldap.connect_ldap(u.config('host'), u.config('dn'), u.config('password'))
+    print(u.returncode(0,'I m alive'))
     return 0
 
 

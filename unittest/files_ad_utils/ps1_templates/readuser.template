@@ -1,0 +1,1 @@
+Get-ADUser -Identity {{ e.uid}} -Properties GivenName,Surname,UserPrincipalName,SamAccountName,DistinguishedName,EmailAddress,Enabled | convertTo-Json -Compress

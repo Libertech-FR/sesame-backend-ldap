@@ -1,0 +1,26 @@
+param (
+    [string]$user,
+    [string]$password
+
+)
+
+
+Function Test-ADAuthentication {
+    param(
+        [string]$username,
+        [string]$password)
+
+        ((New-Object DirectoryServices.DirectoryEntry -ArgumentList "",$username,$password).psbase.name) -ne $null
+}
+$userFound=get-aduser -Filter "SamAccountName -eq '$user' -and Enabled -eq '$True' -and PasswordExpired -eq '$False'"
+if ( ! $userFound ){
+    Write-Host 'user not active or not found or password expired'
+    exit 1
+}
+if (Test-ADAuthentication -username "$user" -password "$password"){
+    Write-Host "password ok"
+    exit 0
+ }else{
+     Write-Host "Authentication Invalid password"
+    exit 1
+ }
