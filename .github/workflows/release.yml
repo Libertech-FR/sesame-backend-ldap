@@ -22,7 +22,9 @@ jobs:
           cp src/config.yml .debpkg/var/lib/sesame-daemon/backends-modules/openldap
           cp README.md .debpkg/var/lib/sesame-daemon/backends-modules/openldap
           cp install.sh .debpkg/var/lib/sesame-daemon/backends-modules/openldap
+          cp update.sh .debpkg/var/lib/sesame-daemon/backends-modules/openldap
           chmod 700 .debpkg/var/lib/sesame-daemon/backends-modules/openldap/install.sh
+          chmod 700 .debpkg/var/lib/sesame-daemon/backends-modules/openldap/update.sh
       - uses: jiro4989/build-deb-action@v3
         with:
            package: sesame-backend-openldap

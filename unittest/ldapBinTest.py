@@ -116,12 +116,18 @@ class ldapBinTest (unittest.TestCase):
         self.assertEqual(result["status"], 0)
         self.assertEqual(result["message"], "not concerned")
 
-    def test_99delentity(self):
+    def test_19delentity(self):
         ret = self.run_backend('delentity.py', './files_ad_utils/identity1.json')
         self.assertEqual(ret['returncode'], 0)
         result = json.loads(ret["stdout"])
         self.assertEqual(result["status"], 0)
         self.assertEqual(result["message"], "user : uid=omaton,ou=adm,ou=PERSONNES,dc=lyon,dc=archi,dc=fr deleted")
+    def test_20eduperson(self):
+        ret = self.run_backend('upsertidentity.py', './files_ad_utils/eduPersonTest.json')
+        self.assertEqual(ret['returncode'], 0)
+        result = json.loads(ret["stdout"])
+        self.assertEqual(result["status"], 0)
+        self.assertEqual(result["message"], "Entree uid=omounier,ou=adm,ou=PERSONNES,dc=lyon,dc=archi,dc=fr mod")
 
 if __name__ == '__main__':
     unittest.main()

@@ -182,6 +182,26 @@ class backendLdapCase(unittest.TestCase):
         result = json.loads(x)
         self.assertEqual(result['status'], 0)
         self.assertEqual(result['message'],"Identity disabled")
+    def test25_eduperson(self):
+        config = u.read_config('./files_backend_utils/configeal.conf')
+        ldap.set_config(config)
+        data = u.get_config()
+        l = ldap.connect_ldap(data['host'], data['dn'], data['password'])
+        entity = u.readjsonfile("./files_ad_utils/edupersonTest.json")
+        x = ldap.upsert_entry(l, entity)
+        result = json.loads(x)
+        self.assertEqual(result['status'], 0)
+        self.assertEqual(result['message'], "Entree uid=ddoloty,ou=adm,ou=PERSONNES,dc=lyon,dc=archi,dc=fr mod")
+    def test26_delete_entry(self):
+        config = u.read_config('./files_backend_utils/config1.conf')
+        ldap.set_config(config)
+        data = u.get_config()
+        l = ldap.connect_ldap(data['host'], data['dn'], data['password'])
+        entity = u.readjsonfile("./files_ad_utils/identity1.json")
+        x= ldap.delete_entity(l, entity)
+        result = json.loads(x)
+        self.assertEqual(result['status'], 0)
+        self.assertEqual(result['message'], "user : uid=omaton,ou=esn,ou=PERSONNES,dc=lyon,dc=archi,dc=fr deleted")
 
     def test99_delete_entry(self):
         config = u.read_config('./files_backend_utils/config1.conf')
