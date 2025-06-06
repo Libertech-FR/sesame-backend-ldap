@@ -5,17 +5,17 @@ import backend_utils as u
 
 class BackendUtilsCase(unittest.TestCase):
     def test_config(self):
-        config = u.read_config('./files_backend_utils/config1.conf')
+        config = u.read_config('./files_backend_utils/config2.conf')
         self.assertEqual(u.config('host','x'),"1.2.3.4")
         # test cle non existante
         self.assertEqual(u.config('NoExistantKey','x'),'x')
     def test_getConfig(self):
-        u.read_config('./files_backend_utils/config1.conf')
+        u.read_config('./files_backend_utils/config2.conf')
         data=u.get_config()
         self.assertEqual(data['host'],"1.2.3.4")
         self.assertEqual(data['user'], "administrateur")
         self.assertEqual(data['base'], "dc=libertest1,dc=fr")
-        self.assertEqual(data['backendfor'], "adm,etd,esn")
+        self.assertEqual(data['backendfor'], "adm,etd,esn,div")
     def test_returncode(self):
         x=u.returncode(0,"test")
         self.assertEqual(u.returncode(0,"test"),'{"status": 0, "message": "test"}')
@@ -54,5 +54,18 @@ class BackendUtilsCase(unittest.TestCase):
         self.assertEqual(u.find_key(entry,'supannEntiteAffectationPrincipale'),'div')
         # test clé qui n existe pas
         self.assertEqual(u.find_key(entry, 'abcdef'), '')
+    def test_exclude_objectclass(self):
+        config = u.read_config('./files_backend_utils/config1.conf')
+        entity = u.readjsonfile("./files_ad_utils/excludeObjectclass.json")
+        entry = u.make_entry_array(entity)
+        self.assertEqual(entry['izlyAttribute'], "test")
+        objectclasses = u.make_objectclass(entity, [])
+        self.assertIn('izly', objectclasses)
+        u.__CONFIG__.set('config', 'excludedObjectclasses', 'izly')
+        entry = u.make_entry_array(entity)
+        self.assertNotIn('izlyAttribute',entry)
+        objectclasses=u.make_objectclass(entity,[])
+        self.assertNotIn('izly',objectclasses)
+
 if __name__ == '__main__':
     unittest.main()

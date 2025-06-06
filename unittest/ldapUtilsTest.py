@@ -56,7 +56,6 @@ class backendLdapCase(unittest.TestCase):
     def test08_make_objectclass(self):
         entity = u.readjsonfile("./files_ad_utils/identity1.json")
         test=u.make_objectclass(entity,[])
-        x=1
         self.assertEqual(len(test),6)
 
     def test09_upsertEntry(self):
@@ -183,7 +182,7 @@ class backendLdapCase(unittest.TestCase):
         self.assertEqual(result['status'], 0)
         self.assertEqual(result['message'],"Identity disabled")
     def test25_eduperson(self):
-        config = u.read_config('./files_backend_utils/configeal.conf')
+        config = u.read_config('./files_backend_utils/config1.conf')
         ldap.set_config(config)
         data = u.get_config()
         l = ldap.connect_ldap(data['host'], data['dn'], data['password'])
@@ -191,7 +190,7 @@ class backendLdapCase(unittest.TestCase):
         x = ldap.upsert_entry(l, entity)
         result = json.loads(x)
         self.assertEqual(result['status'], 0)
-        self.assertEqual(result['message'], "Entree uid=ddoloty,ou=adm,ou=PERSONNES,dc=lyon,dc=archi,dc=fr mod")
+        self.assertEqual(result['message'], "Entree uid=xx,ou=people,ou=PERSONNES,dc=lyon,dc=archi,dc=fr mod")
     def test26_delete_entry(self):
         config = u.read_config('./files_backend_utils/config1.conf')
         ldap.set_config(config)
@@ -203,16 +202,7 @@ class backendLdapCase(unittest.TestCase):
         self.assertEqual(result['status'], 0)
         self.assertEqual(result['message'], "user : uid=omaton,ou=esn,ou=PERSONNES,dc=lyon,dc=archi,dc=fr deleted")
 
-    def test99_delete_entry(self):
-        config = u.read_config('./files_backend_utils/config1.conf')
-        ldap.set_config(config)
-        data = u.get_config()
-        l = ldap.connect_ldap(data['host'], data['dn'], data['password'])
-        entity = u.readjsonfile("./files_ad_utils/identity1.json")
-        x= ldap.delete_entity(l, entity)
-        result = json.loads(x)
-        self.assertEqual(result['status'], 0)
-        self.assertEqual(result['message'], "user : uid=omaton,ou=esn,ou=PERSONNES,dc=lyon,dc=archi,dc=fr deleted")
+
 
 if __name__ == '__main__':
     unittest.main()

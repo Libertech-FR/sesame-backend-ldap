@@ -131,10 +131,11 @@ def make_objectclass(entity,entry):
         new_objectclasses = entity['payload']['identity']['identity']['additionalFields']['objectClasses']
     else:
         new_objectclasses = entity['payload']['additionalFields']['objectClasses']
-
+    exclusions = config('excludedObjectclasses')
     for k in new_objectclasses:
         if k.lower() not in objectclasses:
-            objectclasses.append(k)
+            if exclusions.find(k.lower()) == -1:
+                objectclasses.append(k)
 
     return objectclasses
 

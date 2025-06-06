@@ -6,3 +6,4 @@ src/etc/config.conf
 /tests
 /src/lib/__pycache__
 /unittest/__pycache__
+unittest/files_backend_utils/config1.conf
