@@ -12,15 +12,27 @@ import backend_utils as u
 def set_config(config):
     u.__CONFIG__ = config
 
+def format_ldap_error(err):
+    details = err.args[0] if len(err.args) > 0 else err
+    if isinstance(details, dict):
+        result = details.get("result", "")
+        desc = details.get("desc", "")
+        info = details.get("info", "")
+        return (str(result) + ' ' + str(desc) + ' ' + str(info)).strip()
+    if isinstance(details, (list, tuple)):
+        return " ".join([str(part) for part in details]).strip()
+    return str(details).strip()
+
 def connect_ldap(url,dn,password):
     try:
-        l=ldap.initialize(url)
+        # python-ldap expects an LDAP URI (ldap:// or ldaps://).
+        ldap_uri = url if '://' in str(url) else 'ldap://' + str(url)
+        l=ldap.initialize(ldap_uri)
         l.set_option(ldap.OPT_X_TLS_REQUIRE_CERT, ldap.OPT_X_TLS_ALLOW)
         l.simple_bind_s(dn,password)
         return l
     except ldap.LDAPError as e:
-        e_dict = e.args[0]
-        print(u.returncode(1, str(e_dict.get("result")) + ' ' + e_dict.get("desc")))
+        print(u.returncode(1, format_ldap_error(e)))
         return(1)
 
 def convert_to_utf8(entry):
@@ -102,8 +114,7 @@ def search_entity(l,entity):
         r=l.search_s(base,ldap.SCOPE_SUBTREE,filter)
         return r
     except ldap.LDAPError as e:
-        e_dict = e.args[0]
-        print(u.returncode(1, str(e_dict.get("result")) + ' ' + e_dict.get("desc") + " " + e_dict.get("info")))
+        print(u.returncode(1, format_ldap_error(e)))
         exit(1)
 
 def upsert_entry(l,entity):
@@ -121,8 +132,7 @@ def upsert_entry(l,entity):
             action="add"
             l.add_s(dn, ldif)
         except ldap.LDAPError as e:
-            e_dict = e.args[0]
-            print(u.returncode(1, "add " + str(e_dict.get("result")) + ' ' + e_dict.get("desc") + " "+ e_dict.get("info",'')))
+            print(u.returncode(1, "add " + format_ldap_error(e)))
             exit(1)
     else:
         if len(r) > 1:
@@ -142,8 +152,7 @@ def upsert_entry(l,entity):
                 action="mod"
                 l.modify_s(r[0][0],ldif)
             except ldap.LDAPError as e:
-                e_dict = e.args[0]
-                print(u.returncode(1, 'mod ' + str(e_dict.get("result")) + ' ' + e_dict.get("desc") + " "+ e_dict.get("info",'')))
+                print(u.returncode(1, 'mod ' + format_ldap_error(e)))
                 return(1)
         else:
             ## changement du DN
@@ -156,8 +165,7 @@ def upsert_entry(l,entity):
                 action="rename"
                 l.rename_s(oldDn,new_rdn,newsuperior=newSuperior)
             except ldap.LDAPError as e:
-                e_dict = e.args[0]
-                print(u.returncode(1, 'rename ' + str(e_dict.get("result")) + ' ' + e_dict.get("desc") + " "+ e_dict.get("info")))
+                print(u.returncode(1, 'rename ' + format_ldap_error(e)))
                 exit(1)
     return u.returncode(0,"Entree " + dn + " " + action)
 
@@ -223,8 +231,7 @@ def delete_entity(l,entity):
             l.delete_s(r[0][0])
             return u.returncode(0, "user : " + r[0][0] + " deleted")
         except ldap.LDAPError as e:
-            e_dict = e.args[0]
-            print(u.returncode(1, str(e_dict.get("result")) + ' ' + e_dict.get("desc") + " "+ e_dict.get("info")))
+            print(u.returncode(1, format_ldap_error(e)))
             exit(1)
     else:
         print(u.returncode(1, "User not found"))
@@ -272,8 +279,7 @@ def activate_entry(l,entity,activate):
             l.modify_s(r[0][0], ldif)
             return(u.returncode(0, message))
         except ldap.LDAPError as e:
-            e_dict = e.args[0]
-            return (u.returncode(1, str(e_dict.get("result")) + ' ' + e_dict.get("desc") + " " + e_dict.get("info")))
+            return (u.returncode(1, format_ldap_error(e)))
 
     else:
         return (u.returncode(1,"Not Found"))

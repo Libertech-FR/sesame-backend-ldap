@@ -83,6 +83,16 @@ def _finditem(obj, key):
             if item is not None:
                 return item
 
+def first_non_empty_value(value):
+    if isinstance(value, list):
+        for item in value:
+            s = str(item).strip()
+            if s != "":
+                return s
+        return ""
+    s = str(value).strip()
+    return s if s != "" else ""
+
 def make_entry_array(entity):
     data = {}
     if "identity" in entity['payload']:
@@ -113,6 +123,15 @@ def make_entry_array(entity):
                     if type(v) is int:
                         v = str(v)
                     data[k] = v
+
+    # employeeNumber is usually SINGLE-VALUE in LDAP schema.
+    # Prefer primaryEmployeeNumber when provided by upstream payload.
+    if 'employeeNumber' in data:
+        primary_employee_number = first_non_empty_value(find_key(entity, 'primaryEmployeeNumber'))
+        if primary_employee_number != "":
+            data['employeeNumber'] = primary_employee_number
+        else:
+            data['employeeNumber'] = first_non_empty_value(data['employeeNumber'])
     return data
 
 
