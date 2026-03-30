@@ -153,7 +153,9 @@ def upsert_entry(l,entity):
                 l.modify_s(r[0][0],ldif)
             except ldap.LDAPError as e:
                 print(u.returncode(1, 'mod ' + format_ldap_error(e)))
-                return(1)
+                # IMPORTANT: forcer un exit non-zéro pour que le daemon traite la réponse
+                # comme une erreur (et non comme un "succès" avec status=0).
+                exit(1)
         else:
             ## changement du DN
             oldDn=r[0][0]
