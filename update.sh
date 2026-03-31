@@ -31,9 +31,15 @@ for DIR in "${INSTALLDIR}"/*; do
     mkdir -p "${DIR}/lib" "${DIR}/bin"
 
     for I in "${MODULE_DIR}"/lib/*; do
+      [[ -e "${I}" ]] || continue
+      [[ "$(basename -- "${I}")" == "__pycache__" ]] && continue
+      [[ -f "${I}" ]] || continue
       ln -sf "${I}" "${DIR}/lib/"
     done
     for I in "${MODULE_DIR}"/bin/*; do
+      [[ -e "${I}" ]] || continue
+      [[ "$(basename -- "${I}")" == "__pycache__" ]] && continue
+      [[ -f "${I}" ]] || continue
       ln -sf "${I}" "${DIR}/bin/"
     done
   fi
