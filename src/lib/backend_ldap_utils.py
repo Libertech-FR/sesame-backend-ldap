@@ -124,6 +124,17 @@ def upsert_entry(l,entity):
         # lentree n existe pas
         #creation de la liste
         entry=u.make_entry_array_without_empty(entity)
+        # employeeNumber est en général SINGLE-VALUE dans le schéma LDAP.
+        # En cas de payload amont qui fournirait plusieurs valeurs,
+        # on force ici une seule valeur pour éviter une violation de contrainte.
+        if isinstance(entry.get('employeeNumber'), list):
+            for item in entry['employeeNumber']:
+                s = str(item).strip()
+                if s != "":
+                    entry['employeeNumber'] = s
+                    break
+            else:
+                entry['employeeNumber'] = ""
         ## Ajout objectclass
         entry['objectclass']=u.make_objectclass(entity,r)
         dn=compose_dn(entity)
@@ -139,7 +150,26 @@ def upsert_entry(l,entity):
             print(u.returncode(1,"many identities found"))
             exit(1)
         entry=u.make_entry_array_without_empty(entity);
+        # Idem: forcer employeeNumber/employeenumber à une seule valeur avant conversion LDIF.
+        # NB: `complete_entry()` lower-case ensuite les clés, d'où la gestion des deux cas.
+        if isinstance(entry.get('employeeNumber'), list):
+            for item in entry['employeeNumber']:
+                s = str(item).strip()
+                if s != "":
+                    entry['employeeNumber'] = s
+                    break
+            else:
+                entry['employeeNumber'] = ""
+
         entry=complete_entry(entry,r);
+        if isinstance(entry.get('employeenumber'), list):
+            for item in entry['employeenumber']:
+                s = str(item).strip()
+                if s != "":
+                    entry['employeenumber'] = s
+                    break
+            else:
+                entry['employeenumber'] = ""
         dn = compose_dn(entity)
         entry['objectclass'] = u.make_objectclass(entity,r)
         entry = convert_to_utf8(entry)
