@@ -2,7 +2,7 @@ import unittest
 import subprocess
 import os
 import json
-__PYTHONENV__='/../.venv/sesame-backend-ldap/bin/python'
+__PYTHONENV__='/../.venv/bin/python'
 class ldapBinTest (unittest.TestCase):
     def run_backend(self,script, file= "",args=""):
         dir = os.getcwd()
@@ -19,6 +19,7 @@ class ldapBinTest (unittest.TestCase):
             #open file to pass to stdin
             fic = open(file, "r")
             content = fic.read()
+            content = content.replace("\n", "")
             fic.close()
             os.chdir('../src/bin')
             ret = subprocess.run(execargs,input=content.encode(),capture_output=True)
@@ -128,6 +129,10 @@ class ldapBinTest (unittest.TestCase):
         result = json.loads(ret["stdout"])
         self.assertEqual(result["status"], 0)
         self.assertEqual(result["message"], "Entree uid=omounier,ou=adm,ou=PERSONNES,dc=lyon,dc=archi,dc=fr mod")
+
+    def test_21lifecycle(self):
+        ret =self.run_backend('lifecycle.py', './files_ad_utils/lifecycle.json')
+        result = json.loads(ret["stdout"])
 
 if __name__ == '__main__':
     unittest.main()

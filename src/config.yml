@@ -26,3 +26,6 @@ actions:
   PING_TARGET:
     script: 'ping.py'
     onError: 'stop'
+  IDENTITY_LIFECYCLE_CHANGED:
+    script: 'lifecycle.py'
+    onError: 'stop'

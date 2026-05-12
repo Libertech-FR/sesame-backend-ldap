@@ -1,0 +1,221 @@
+{
+  "concernedTo": "6852cd3980ae416061df5dae",
+  "payload": {
+    "before": {
+      "_id": "6852cd3980ae416061df5dae",
+      "inetOrgPerson": {
+        "cn": "Dupont Gerald",
+        "displayName": "Gérald Dupont",
+        "facsimileTelephoneNumber": "",
+        "givenName": "Gérald",
+        "labeledURI": "",
+        "mail": "",
+        "mobile": "06 01 02 03 04",
+        "postalAddress": "",
+        "preferredLanguage": "",
+        "sn": "Dupont",
+        "telephoneNumber": "",
+        "title": "",
+        "uid": "gdupont",
+        "employeeNumber": [
+          "1"
+        ],
+        "employeeType": "TAIGA",
+        "departmentNumber": [
+          "esn"
+        ],
+        "jpegPhoto": "",
+        "userCertificate": ""
+      },
+      "additionalFields": {
+        "objectClasses": [
+          "supannPerson",
+          "eduPerson",
+          "sogxuser"
+        ],
+        "attributes": {
+          "eduPerson": {
+            "edupersonaffiliation": [
+              "teacher",
+              "member"
+            ],
+            "edupersonprimaryaffiliation": "teacher",
+            "edupersonprincipalname": "gdupont@domaine.fr"
+          },
+          "sogxuser": {
+            "sogxdisableflag": 0,
+            "sogxquota": 0,
+            "proxyaddress": []
+          },
+          "supannPerson": {
+            "supannAutreMail": "dupont@perso.fr",
+            "supannEmpId": "1",
+            "supannEtablissement": "{UAI}123456A",
+            "supannNomdeNaissance": "",
+            "supannOIDCDatedeNaissance": "30/01/1975",
+            "supannOIDCGenre": "M.",
+            "supannPrenomsEtatCivil": "Gérald",
+            "supannRefId": [
+              "1",
+              "2"
+            ],
+            "supannTypeEntiteAffectation": [
+              "esn"
+            ],
+            "supanncivilite": "M.",
+            "supannCodeINSEEPaysDeNaissance": "",
+            "supannCodeINSEEVilleDeNaissance": "",
+            "supannListeRouge": "",
+            "mailForwardingAddress": "",
+            "supannMailPerso": "test@test.fr",
+            "supannRoleGenerique": "",
+            "supannParrainDN": "",
+            "supannActivite": "",
+            "supannEmpDateFin": "",
+            "supannEtuAnneeInscription": "",
+            "supannEntiteAffectation": [],
+            "supannEntiteAffectationPrincipale": "xxx",
+            "supannEtUid": "",
+            "supannEtuCursusAnnee": "",
+            "supannEtuDiplome": "",
+            "supannCodeIne": "",
+            "supannEtuId": ""
+          }
+        },
+        "validations": {}
+      },
+      "dataStatus": 1,
+      "deletedFlag": false,
+      "initInfo": {
+        "sentDate": "",
+        "initDate": "2026-04-07T10:57:16.669Z"
+      },
+      "initState": 1,
+      "lastBackendSync": "2026-04-14T08:08:00.510Z",
+      "lastSync": "2025-06-18T14:29:13.646Z",
+      "lifecycle": "O",
+      "metadata": {
+        "createdBy": "local",
+        "createdAt": "2025-06-18T14:29:13.646Z",
+        "lastUpdatedBy": "admin",
+        "lastUpdatedAt": "2026-04-14T08:07:37.997Z"
+      },
+      "primaryEmployeeNumber": "",
+      "srcFusionId": "",
+      "state": 99,
+      "fingerprint": "e2d5b2c49db1e24632ca21d2a0f8a43136f4270093b55cf7394fe8b212cc9114",
+      "ignoreLifecycle": false,
+      "lastLifecycleUpdate": "2026-03-23T08:32:52.926Z",
+      "ignoreFusion": []
+    },
+    "after": {
+      "_id": "6852cd3980ae416061df5dae",
+      "inetOrgPerson": {
+        "cn": "Dupont Gerald",
+        "displayName": "Gérald Dupont",
+        "facsimileTelephoneNumber": "",
+        "givenName": "Gérald",
+        "labeledURI": "",
+        "mail": "",
+        "mobile": "06 01 02 03 04",
+        "postalAddress": "",
+        "preferredLanguage": "",
+        "sn": "Dupont",
+        "telephoneNumber": "",
+        "title": "",
+        "uid": "gdupont",
+        "employeeNumber": "1",
+        "employeeType": "TAIGA",
+        "departmentNumber": [
+          "esn"
+        ],
+        "jpegPhoto": "",
+        "userCertificate": ""
+      },
+      "additionalFields": {
+        "objectClasses": [
+          "supannPerson",
+          "eduPerson",
+          "sogxuser"
+        ],
+        "attributes": {
+          "eduPerson": {
+            "edupersonaffiliation": [
+              "teacher",
+              "member"
+            ],
+            "edupersonprimaryaffiliation": "teacher",
+            "edupersonprincipalname": "gdupont@domaine.fr"
+          },
+          "sogxuser": {
+            "sogxdisableflag": 0,
+            "sogxquota": 0,
+            "proxyaddress": []
+          },
+          "supannPerson": {
+            "supannAutreMail": "dupont@perso.fr",
+            "supannEmpId": "1",
+            "supannEtablissement": "{UAI}123456A",
+            "supannNomdeNaissance": "",
+            "supannOIDCDatedeNaissance": "30/01/1975",
+            "supannOIDCGenre": "M.",
+            "supannPrenomsEtatCivil": "Gérald",
+            "supannRefId": [
+              "1",
+              "2"
+            ],
+            "supannTypeEntiteAffectation": [
+              "esn"
+            ],
+            "supanncivilite": "M.",
+            "supannCodeINSEEPaysDeNaissance": "",
+            "supannCodeINSEEVilleDeNaissance": "",
+            "supannListeRouge": "",
+            "mailForwardingAddress": "",
+            "supannMailPerso": "test@test.fr",
+            "supannRoleGenerique": "",
+            "supannParrainDN": "",
+            "supannActivite": "",
+            "supannEmpDateFin": "",
+            "supannEtuAnneeInscription": "",
+            "supannEntiteAffectation": [],
+            "supannEntiteAffectationPrincipale": "xxx",
+            "supannEtUid": "",
+            "supannEtuCursusAnnee": "",
+            "supannEtuDiplome": "",
+            "supannCodeIne": "",
+            "supannEtuId": ""
+          }
+        },
+        "validations": {}
+      },
+      "dataStatus": 1,
+      "deletedFlag": false,
+      "initInfo": {
+        "sentDate": "",
+        "initDate": "2026-04-07T10:57:16.669Z"
+      },
+      "initState": 1,
+      "lastBackendSync": "2026-04-14T08:08:00.510Z",
+      "lastSync": "2025-06-18T14:29:13.646Z",
+      "lifecycle": "I",
+      "metadata": {
+        "createdBy": "local",
+        "createdAt": "2025-06-18T14:29:13.646Z",
+        "lastUpdatedBy": "admin",
+        "lastUpdatedAt": "2026-04-14T08:08:08.106Z"
+      },
+      "primaryEmployeeNumber": "",
+      "srcFusionId": "",
+      "state": 99,
+      "fingerprint": "e2d5b2c49db1e24632ca21d2a0f8a43136f4270093b55cf7394fe8b212cc9114",
+      "ignoreLifecycle": false,
+      "lastLifecycleUpdate": "2026-04-14T08:08:08.104Z",
+      "ignoreFusion": []
+    }
+  },
+  "options": {
+    "updateStatus": true,
+    "task": "69ddf5e8fad42e7823306393"
+  }
+}

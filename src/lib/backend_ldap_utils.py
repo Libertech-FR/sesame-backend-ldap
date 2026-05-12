@@ -1,13 +1,16 @@
 import configparser
 import json
+import os
 
 import jinja2
 import ldap
 import ldap.modlist as modlist
 import sys
+
 from sys import stdin
 sys.path.append('.')
 import backend_utils as u
+__LIFECYLE_DIR__="../lifecycle"
 
 def set_config(config):
     u.__CONFIG__ = config
@@ -315,3 +318,17 @@ def activate_entry(l,entity,activate):
 
     else:
         return (u.returncode(1,"Not Found"))
+
+def lifecycle(entity):
+    before = entity['payload']['before']['lifecycle']
+    after = entity['payload']['after']['lifecycle']
+    py_name=before + "_" + after + ".py"
+    test=os.getcwd()
+    r=0
+    if os.path.exists(__LIFECYLE_DIR__ + "/" + py_name):
+        x=1
+    elif os.path.exists(__LIFECYLE_DIR__ + "/" +"lifecycle.py"):
+        import lifecycle
+        lifecycle.do(entity)
+
+    return(r)
