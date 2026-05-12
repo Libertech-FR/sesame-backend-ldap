@@ -36,8 +36,8 @@ def main():
 
     try:
         data = json.loads(content)
-        before = u.find_key(data, 'before.lifecycle')
-        after = u.find_key(data, 'after.lifecycle')
+        before = data['payload']['before']['lifecycle']
+        after = data['payload']['after']['lifecycle']
         specific_name = before + '_' + after if before and after else None
     except (json.JSONDecodeError, Exception):
         specific_name = None
