@@ -41,11 +41,12 @@ def returncode(code,message):
     data={}
     data['status']=code
     data['message']=message
+
     return json.dumps(data)
 
 def is_backend_concerned(entity):
     br=config('branchAttr')
-    entry=make_entry_array(entity);
+    entry=make_entry_array(entity)
     if config('branchAttr') in entry:
         peopleType=entry[config('branchAttr')]
     else:
@@ -59,11 +60,48 @@ def is_backend_concerned(entity):
         for v in peopleType:
           if v in listBackend :
              return True
-    else:
-        if peopleType in listBackend:
-            return True
 
-    return False
+def make_entry_array(entity,key='before'):
+    data = {}
+    if "identity" in entity['payload']:
+        objectclasses = entity['payload']['identity']['identity']['additionalFields']['objectClasses']
+        inetOrgPerson = entity['payload']['identity']['identity']['inetOrgPerson']
+        addFieldsDict = entity['payload']['identity']['identity']['additionalFields']
+        if 'attributes' in addFieldsDict:
+            additionalFields = entity['payload']['identity']['identity']['additionalFields']['attributes']
+        else:
+            additionalFields = {}
+    elif key in entity['payload']:
+        # cas cycle de vie
+        objectclasses = entity['payload'][key]['additionalFields']['objectClasses']
+        inetOrgPerson = entity['payload'][key]['inetOrgPerson']
+        # ajout lifecyle car en dehors du tableau
+        inetOrgPerson['lifecycle'] = entity['payload'][key]['lifecycle']
+        addFieldsDict = entity['payload'][key]['additionalFields']
+        if 'attributes' in addFieldsDict:
+            additionalFields = entity['payload'][key]['additionalFields']['attributes']
+        else:
+            additionalFields = {}
+    else:
+        objectclasses = entity['payload']['additionalFields']['objectClasses']
+        inetOrgPerson = entity['payload']['inetOrgPerson']
+        additionalFields = entity['payload']['additionalFields']['attributes']
+    # inetOrgPerson
+    for k, v in inetOrgPerson.items():
+        if type(v) is int:
+            v = str(v)
+        data[k] = v
+
+    for obj in objectclasses:
+        # recherche si l objectclass est exclu
+        exclusions = config('excludedObjectclasses')
+        if exclusions.find(obj.lower()) == -1:
+            if obj in additionalFields.keys():
+                for k, v in additionalFields[obj].items():
+                    if type(v) is int:
+                        v = str(v)
+                    data[k] = v
+    return data
 
 def find_key(element, key):
     '''
@@ -92,48 +130,6 @@ def first_non_empty_value(value):
         return ""
     s = str(value).strip()
     return s if s != "" else ""
-
-def make_entry_array(entity):
-    data = {}
-    if "identity" in entity['payload']:
-        objectclasses = entity['payload']['identity']['identity']['additionalFields']['objectClasses']
-        inetOrgPerson = entity['payload']['identity']['identity']['inetOrgPerson']
-        addFieldsDict = entity['payload']['identity']['identity']['additionalFields']
-        if 'attributes' in addFieldsDict:
-            additionalFields = entity['payload']['identity']['identity']['additionalFields']['attributes']
-        else:
-            additionalFields = {}
-
-    else:
-        objectclasses = entity['payload']['additionalFields']['objectClasses']
-        inetOrgPerson = entity['payload']['inetOrgPerson']
-        additionalFields = entity['payload']['additionalFields']['attributes']
-    # inetOrgPerson
-    for k, v in inetOrgPerson.items():
-        if type(v) is int:
-            v = str(v)
-        data[k] = v
-
-    for obj in objectclasses:
-        # recherche si l objectclass est exclu
-        exclusions = config('excludedObjectclasses')
-        if exclusions.find(obj.lower()) == -1:
-            if obj in additionalFields.keys():
-                for k, v in additionalFields[obj].items():
-                    if type(v) is int:
-                        v = str(v)
-                    data[k] = v
-
-    # employeeNumber is usually SINGLE-VALUE in LDAP schema.
-    # Prefer primaryEmployeeNumber when provided by upstream payload.
-    if 'employeeNumber' in data:
-        primary_employee_number = first_non_empty_value(find_key(entity, 'primaryEmployeeNumber'))
-        if primary_employee_number != "":
-            data['employeeNumber'] = primary_employee_number
-        else:
-            data['employeeNumber'] = first_non_empty_value(data['employeeNumber'])
-    return data
-
 
 def make_objectclass(entity,entry):
     data = {}

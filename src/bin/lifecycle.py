@@ -41,7 +41,9 @@ def main():
         specific_name = before + '_' + after if before and after else None
     except (json.JSONDecodeError, Exception):
         specific_name = None
-
+    if  u.is_backend_concerned(data) == False:
+        print(u.returncode(0, "not concerned"))
+        exit(0)
     script = None
     if specific_name:
         script = find_script(lifecycle_dir, [specific_name])
