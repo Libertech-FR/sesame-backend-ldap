@@ -45,7 +45,6 @@ def returncode(code,message):
     return json.dumps(data)
 
 def is_backend_concerned(entity):
-    br=config('branchAttr')
     entry=make_entry_array(entity)
     if config('branchAttr') in entry:
         peopleType=entry[config('branchAttr')]
@@ -60,6 +59,7 @@ def is_backend_concerned(entity):
         for v in peopleType:
           if v in listBackend :
              return True
+    return False
 
 def make_entry_array(entity,key='before'):
     data = {}

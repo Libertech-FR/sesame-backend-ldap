@@ -22,7 +22,7 @@
         ],
         "employeeType": "TAIGA",
         "departmentNumber": [
-          "esn"
+          "xxx"
         ],
         "jpegPhoto": "",
         "userCertificate": ""
@@ -60,7 +60,7 @@
               "2"
             ],
             "supannTypeEntiteAffectation": [
-              "esn"
+              "xxx"
             ],
             "supanncivilite": "M.",
             "supannCodeINSEEPaysDeNaissance": "",

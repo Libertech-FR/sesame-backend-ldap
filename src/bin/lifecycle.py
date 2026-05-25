@@ -33,7 +33,7 @@ def main():
     lifecycle_dir = '../lifecycle'
     raw = sys.stdin.read()
     content = raw.replace("\n", "")
-
+    config = u.read_config('../etc/config.conf')
     try:
         data = json.loads(content)
         before = data['payload']['before']['lifecycle']

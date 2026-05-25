@@ -131,20 +131,41 @@ class TestRunBackend(unittest.TestCase):
 
 class TestLifecycleBin(unittest.TestCase):
     """Integration tests: invoke lifecycle.py as a subprocess."""
+    def run_backend(self,script, file= "",args=""):
+        dir = os.getcwd()
+        exe=dir + __PYTHONENV__
+        execargs=[]
+        execargs.append(exe)
+        execargs.append(script)
+        if args :
+            execargs.append(args)
+        if file == '':
+            os.chdir('../src/bin')
+            ret = subprocess.run(execargs,capture_output=True)
+        else:
+            #open file to pass to stdin
+            fic = open(file, "r")
+            content = fic.read()
+            content = content.replace("\n", "")
+            fic.close()
+            os.chdir('../src/bin')
+            ret = subprocess.run(execargs,input=content.encode(),capture_output=True)
+        os.chdir(dir)
+        return { "returncode" : ret.returncode,"stdout" : ret.stdout.decode()}
 
-    def run_backend(self, script, file):
+    def run_backend1(self, script, file):
         dir_ = os.getcwd()
         exe = dir_ + __PYTHONENV__
         with open(file, 'r') as fic:
             content = fic.read().replace('\n', '')
         os.chdir('../src/bin')
-        ret = subprocess.run([exe, script], input=content.encode(), capture_output=True)
+        ret = subprocess.run([script], input=content.encode(), capture_output=True)
         os.chdir(dir_)
         return {'returncode': ret.returncode, 'stdout': ret.stdout.decode()}
 
     def test_lifecycle_concerned(self):
         """lifecycle.json: O→I transition, concerned backend → lifecycle script runs."""
-        ret = self.run_backend('lifecycle.py', './files_ad_utils/lifecycle.json')
+        ret = self.run_backend('./lifecycle.py', './files_ad_utils/lifecycle.json')
         self.assertEqual(ret['returncode'], 0)
         result = json.loads(ret['stdout'])
         self.assertEqual(result['status'], 0)
