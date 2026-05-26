@@ -20,12 +20,16 @@ cp  ./etc/* $INSTALL/etc
 
 mkdir $INSTALL/bin
 mkdir $INSTALL/lib
+mkdir $INSTALL/lifecycle
 PWD=`pwd`
 for I in $PWD/lib/*;do
   ln -s $I $INSTALL/lib
 done
 for I in $PWD/bin/*;do
   ln -s $I $INSTALL/bin
+done
+for I in $PWD/lifecycle/*;do
+  ln -s $I $INSTALL/lifecycle
 done
 chmod 700 $INSTALL/bin/*
 cp config.yml $INSTALL

@@ -15,6 +15,9 @@ jobs:
           mkdir -p .debpkg/var/lib/sesame-daemon/backends-modules/openldap/etc
           mkdir -p .debpkg/var/lib/sesame-daemon/backends-modules/openldap/bin
           mkdir -p .debpkg/var/lib/sesame-daemon/backends-modules/openldap/lib
+          mkdir -p .debpkg/var/lib/sesame-daemon/backends-modules/openldap/lifecycle
+          cp src/lifecycle/* .debpkg/var/lib/sesame-daemon/backends-modules/openldap/lifecycle
+          chmod 700 .debpkg/var/lib/sesame-daemon/backends-modules/openldap/lifecycle/*
           cp src/bin/* .debpkg/var/lib/sesame-daemon/backends-modules/openldap/bin
           chmod 700 .debpkg/var/lib/sesame-daemon/backends-modules/openldap/bin/*
           cp src/lib/* .debpkg/var/lib/sesame-daemon/backends-modules/openldap/lib

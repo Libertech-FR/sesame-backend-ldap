@@ -28,7 +28,14 @@ for DIR in "${INSTALLDIR}"/*; do
   if [[ "${TYPE}" == "openldap" ]]; then
     echo "${DIR} is openldap"
 
-    mkdir -p "${DIR}/lib" "${DIR}/bin"
+    mkdir -p "${DIR}/lib" "${DIR}/bin" "${DIR}/lifecycle"
+
+    for I in "${MODULE_DIR}"/lifecycle/*; do
+      [[ -e "${I}" ]] || continue
+      [[ "$(basename -- "${I}")" == "__pycache__" ]] && continue
+      [[ -f "${I}" ]] || continue
+      ln -sf "${I}" "${DIR}/lifecycle/"
+    done
 
     for I in "${MODULE_DIR}"/lib/*; do
       [[ -e "${I}" ]] || continue
