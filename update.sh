@@ -27,7 +27,8 @@ for DIR in "${INSTALLDIR}"/*; do
 
   if [[ "${TYPE}" == "openldap" ]]; then
     echo "${DIR} is openldap"
-
+    # maj config.yml
+    cp "${MODULE_DIR}"/config.yml "${DIR}"
     mkdir -p "${DIR}/lib" "${DIR}/bin" "${DIR}/lifecycle"
 
     for I in "${MODULE_DIR}"/lifecycle/*; do
@@ -49,5 +50,6 @@ for DIR in "${INSTALLDIR}"/*; do
       [[ -f "${I}" ]] || continue
       ln -sf "${I}" "${DIR}/bin/"
     done
+
   fi
 done
