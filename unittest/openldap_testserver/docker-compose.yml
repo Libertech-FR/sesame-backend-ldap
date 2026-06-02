@@ -1,0 +1,11 @@
+services:
+ ldap-test:
+    container_name: ldap-test
+    image: osixia/openldap:1.5.0
+    command: --copy-service --loglevel debug
+    environment:
+      LDAP_ORGANISATION: "test"
+      LDAP_DOMAIN: "test.local"
+      LDAP_ADMIN_PASSWORD: "XXXXXX"
+    volumes:
+      - ./custom:/container/service/slapd/assets/config/bootstrap/ldif/custom
