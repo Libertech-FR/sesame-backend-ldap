@@ -1,0 +1,35 @@
+dn: cn=sogxmail,cn=schema,cn=config
+changeType: add
+objectClass: olcSchemaConfig
+cn: sogxmail
+olcAttributeTypes: {0}( 1.3.6.1.4.1.7383.20.1 NAME 'sogxdisableflag' DESC 'Acc
+ ount disable flag' EQUALITY caseIgnoreIA5Match SUBSTR caseIgnoreIA5Substrings
+ Match SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
+olcAttributeTypes: {1}( 1.3.6.1.4.1.7383.20.2 NAME 'proxyaddress' DESC 'Emumat
+ e AD proxyaddress' EQUALITY caseIgnoreIA5Match SUBSTR caseIgnoreIA5Substrings
+ Match SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
+olcAttributeTypes: {2}( 1.3.6.1.4.1.7383.20.3 NAME 'sogxHomeServer' DESC 'serv
+ er which keeps the users mailbox' EQUALITY caseIgnoreIA5Match SUBSTR caseIgno
+ reIA5SubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
+olcAttributeTypes: {3}( 1.3.6.1.4.1.7383.20.4 NAME 'sogxQuota' EQUALITY caseIg
+ noreIA5Match SUBSTR caseIgnoreIA5SubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.
+ 121.1.26{256} )
+olcAttributeTypes: {4}( 1.3.6.1.4.1.7383.20.5 NAME 'sogxImapAcl' EQUALITY case
+ IgnoreIA5Match SUBSTR caseIgnoreIA5SubstringsMatch SYNTAX 1.3.6.1.4.1.1466.11
+ 5.121.1.26{256} )
+olcAttributeTypes: {5}( 1.3.6.1.4.1.7383.20.6 NAME 'postfix-mydestination' EQU
+ ALITY caseIgnoreIA5Match SUBSTR caseIgnoreIA5SubstringsMatch SYNTAX 1.3.6.1.4
+ .1.1466.115.121.1.26{256} )
+olcObjectClasses: {0}( 1.3.6.1.4.1.7383.21.1 NAME 'sogxUser' DESC 'SogxUser' S
+ UP top AUXILIARY MAY ( sogxQuota $ proxyaddress $ sogxHomeServer $ sogxDisabl
+ eFlag ) )
+olcObjectClasses: {1}( 1.3.6.1.4.1.7383.21.2 NAME 'sogxMailList' DESC 'maillin
+ g List ' SUP groupOfNames STRUCTURAL MAY ( mail $ sogxDisableFlag $ owner ) )
+olcObjectClasses: {2}( 1.3.6.1.4.1.7383.21.3 NAME 'sogxContainer' DESC 'Contai
+ r emulation' SUP TOP STRUCTURAL MUST ( cn ) )
+olcObjectClasses: {3}( 1.3.6.1.4.1.7383.21.4 NAME 'sogxSharedFolder' DESC 'Ima
+ pshared Folder' SUP TOP STRUCTURAL MUST ( cn $ mail $ sogxImapAcl ) )
+olcObjectClasses: {4}( 1.3.6.1.4.1.7383.21.5 NAME 'sogxMailConfig' DESC 'Confi
+ gsogxmail' SUP TOP STRUCTURAL MUST ( cn $ postfix-mydestination ) )
+olcObjectClasses: {5}( 1.3.6.1.4.1.7383.21.6 NAME 'sogxTrashContainer' DESC 'T
+ rash container' SUP TOP STRUCTURAL MUST ( cn ) )

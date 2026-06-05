@@ -16,14 +16,14 @@ class backendLdapCase(unittest.TestCase):
         ldap.set_config(config)
         entity = u.readjsonfile("./files_ad_utils/identity1.json")
         dn=ldap.compose_dn(entity)
-        self.assertEqual(dn,'uid=omaton,ou=adm,ou=PERSONNES,dc=lyon,dc=archi,dc=fr')
+        self.assertEqual(dn,'uid=omaton,ou=adm,dc=test,dc=local')
     def test03_composedn_template(self):
         config = u.read_config('./files_backend_utils/config1.conf')
         u.__CONFIG__.set('config', 'dnTemplate', 'cn={{e.cn}},{{branch}},ou=myspecialbranch,{{config.base}}')
         ldap.set_config(config)
         entity = u.readjsonfile("./files_ad_utils/identity1.json")
         dn = ldap.compose_dn(entity)
-        self.assertEqual(dn, 'cn=Maton Olivier,ou=adm,ou=myspecialbranch,dc=lyon,dc=archi,dc=fr')
+        self.assertEqual(dn, 'cn=Maton Olivier,ou=adm,ou=myspecialbranch,dc=test,dc=local')
 
     def test04_compose_dn_otherpopulation(self):
         config = u.read_config('./files_backend_utils/config1.conf')
@@ -32,14 +32,14 @@ class backendLdapCase(unittest.TestCase):
         entity = u.readjsonfile("./files_ad_utils/identity1.json")
         entity['payload']['identity']['identity']['inetOrgPerson']['departmentNumber']=['test']
         dn = ldap.compose_dn(entity)
-        self.assertEqual(dn, 'uid=omaton,ou=test,ou=PERSONNES,dc=lyon,dc=archi,dc=fr')
+        self.assertEqual(dn, 'uid=omaton,ou=test,dc=test,dc=local')
 
     def test05_compose_dn_nobranch(self):
         config = u.read_config('./files_backend_utils/config1.conf')
         entity = u.readjsonfile("./files_ad_utils/identity1.json")
         entity['payload']['identity']['identity']['inetOrgPerson']['departmentNumber']=['test']
         dn = ldap.compose_dn(entity)
-        self.assertEqual(dn, 'uid=omaton,ou=PERSONNES,dc=lyon,dc=archi,dc=fr')
+        self.assertEqual(dn, 'uid=omaton,dc=test,dc=local')
 
     def test06_testrdn(self):
         config = u.read_config('./files_backend_utils/config1.conf')
@@ -51,9 +51,10 @@ class backendLdapCase(unittest.TestCase):
         self.assertEqual(rdn, 'cn=Maton Olivier')
 
     def test07_dnsuperior(self):
-        self.assertEqual(ldap.dn_superior("uid=omaton,ou=PERSONNES,dc=lyon,dc=archi,dc=fr"),"ou=PERSONNES,dc=lyon,dc=archi,dc=fr")
+        self.assertEqual(ldap.dn_superior("uid=omaton,ou=PERSONNES,dc=test,dc=local"),"ou=PERSONNES,dc=test,dc=local")
 
     def test08_make_objectclass(self):
+        config = u.read_config('./files_backend_utils/config1.conf')
         entity = u.readjsonfile("./files_ad_utils/identity1.json")
         test=u.make_objectclass(entity,[])
         self.assertEqual(len(test),6)
@@ -68,7 +69,7 @@ class backendLdapCase(unittest.TestCase):
         x=ldap.upsert_entry(l,entity)
         result=json.loads(x)
         self.assertEqual(result['status'],0)
-        self.assertEqual(result['message'], "Entree uid=omaton,ou=adm,ou=PERSONNES,dc=lyon,dc=archi,dc=fr add")
+        self.assertEqual(result['message'], "Entree uid=omaton,ou=adm,dc=test,dc=local add")
 
     def test10_upsertMod(self):
         config = u.read_config('./files_backend_utils/config1.conf')
@@ -80,7 +81,7 @@ class backendLdapCase(unittest.TestCase):
         x = ldap.upsert_entry(l, entity)
         result = json.loads(x)
         self.assertEqual(result['status'], 0)
-        self.assertEqual(result['message'], "Entree uid=omaton,ou=adm,ou=PERSONNES,dc=lyon,dc=archi,dc=fr mod")
+        self.assertEqual(result['message'], "Entree uid=omaton,ou=adm,dc=test,dc=local mod")
 
     def test11_move_entry(self):
         config = u.read_config('./files_backend_utils/config1.conf')
@@ -92,7 +93,7 @@ class backendLdapCase(unittest.TestCase):
         x = ldap.upsert_entry(l, entity)
         result = json.loads(x)
         self.assertEqual(result['status'], 0)
-        self.assertEqual(result['message'], "Entree uid=omaton,ou=esn,ou=PERSONNES,dc=lyon,dc=archi,dc=fr rename")
+        self.assertEqual(result['message'], "Entree uid=omaton,ou=esn,dc=test,dc=local rename")
 
     def test12_initpassword(self):
         config = u.read_config('./files_backend_utils/config1.conf')
@@ -110,7 +111,7 @@ class backendLdapCase(unittest.TestCase):
         ldap.set_config(config)
         data = u.get_config()
         ## test du mot de passe
-        l1 = ldap.connect_ldap(data['host'], 'uid=omaton,ou=esn,ou=PERSONNES,dc=lyon,dc=archi,dc=fr','Abbert1xIEIIE88!')
+        l1 = ldap.connect_ldap(data['host'], 'uid=omaton,ou=esn,dc=test,dc=local','Abbert1xIEIIE88!')
         self.assertNotEqual(l1,1)
 
     def test16_test_wrongpassword(self):
@@ -118,7 +119,7 @@ class backendLdapCase(unittest.TestCase):
         ldap.set_config(config)
         data = u.get_config()
         ## test du mot de passe
-        l1 = ldap.connect_ldap(data['host'], 'uid=omaton,ou=esn,ou=PERSONNES,dc=lyon,dc=archi,dc=fr',
+        l1 = ldap.connect_ldap(data['host'], 'uid=omaton,ou=esn,dc=test,dc=local',
                                'xx')
         self.assertEqual(l1, 1)
 
@@ -138,7 +139,7 @@ class backendLdapCase(unittest.TestCase):
         ldap.set_config(config)
         data = u.get_config()
         ## test du mot de passe
-        l1 = ldap.connect_ldap(data['host'], 'uid=omaton,ou=esn,ou=PERSONNES,dc=lyon,dc=archi,dc=fr','AbCx34IddWZE1!')
+        l1 = ldap.connect_ldap(data['host'], 'uid=omaton,ou=esn,dc=test,dc=local','AbCx34IddWZE1!')
         self.assertNotEqual(l1,1)
 
     def test22_testoldpassword(self):
@@ -146,7 +147,7 @@ class backendLdapCase(unittest.TestCase):
         ldap.set_config(config)
         data = u.get_config()
         ## test du mot de passe
-        l1 = ldap.connect_ldap(data['host'], 'uid=omaton,ou=esn,ou=PERSONNES,dc=lyon,dc=archi,dc=fr',
+        l1 = ldap.connect_ldap(data['host'], 'uid=omaton,ou=esn,dc=test,dc=local',
                                'Abbert1xIEIIE88!')
         self.assertEqual(l1, 1)
 
@@ -190,7 +191,7 @@ class backendLdapCase(unittest.TestCase):
         x = ldap.upsert_entry(l, entity)
         result = json.loads(x)
         self.assertEqual(result['status'], 0)
-        self.assertEqual(result['message'], "Entree uid=xx,ou=people,ou=PERSONNES,dc=lyon,dc=archi,dc=fr mod")
+        self.assertEqual(result['message'], "Entree uid=xx,ou=adm,dc=test,dc=local add")
     def test26_delete_entry(self):
         config = u.read_config('./files_backend_utils/config1.conf')
         ldap.set_config(config)
@@ -200,7 +201,7 @@ class backendLdapCase(unittest.TestCase):
         x= ldap.delete_entity(l, entity)
         result = json.loads(x)
         self.assertEqual(result['status'], 0)
-        self.assertEqual(result['message'], "user : uid=omaton,ou=esn,ou=PERSONNES,dc=lyon,dc=archi,dc=fr deleted")
+        self.assertEqual(result['message'], "user : uid=omaton,ou=esn,dc=test,dc=local deleted")
 
 
 

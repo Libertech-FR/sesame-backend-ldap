@@ -1,11 +1,19 @@
 services:
- ldap-test:
+  ldap-test:
     container_name: ldap-test
     image: osixia/openldap:1.5.0
     command: --copy-service --loglevel debug
+    ports:
+      - 127.0.0.1:389:389
     environment:
-      LDAP_ORGANISATION: "test"
+      LDAP_ORGANIZATION: "test"
       LDAP_DOMAIN: "test.local"
+      OPENLDAP_BOOTSTRAP_SUFFIX: "dc=test,dc=local"
       LDAP_ADMIN_PASSWORD: "XXXXXX"
+      OPENLDAP_BOOTSTRAP_TLS : false
+      OPENLDAP_BOOTSTRAP_MEMBEROF: true
+      OPENLDAP_BOOTSTRAP_REPLICATION: false
     volumes:
       - ./custom:/container/service/slapd/assets/config/bootstrap/ldif/custom
+
+

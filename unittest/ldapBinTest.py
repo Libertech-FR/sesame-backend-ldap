@@ -38,14 +38,14 @@ class ldapBinTest (unittest.TestCase):
         self.assertEqual(ret['returncode'], 0)
         result = json.loads(ret["stdout"])
         self.assertEqual(result["status"], 0)
-        self.assertEqual(result["message"], "Entree uid=omaton,ou=adm,ou=PERSONNES,dc=lyon,dc=archi,dc=fr add")
+        self.assertEqual(result["message"], "Entree uid=omaton,ou=adm,dc=test,dc=local add")
 
     def test_03upsertidentity_mod(self):
         ret = self.run_backend('upsertidentity.py', './files_ad_utils/identity1.json')
         self.assertEqual(ret['returncode'], 0)
         result = json.loads(ret["stdout"])
         self.assertEqual(result["status"], 0)
-        self.assertEqual(result["message"], "Entree uid=omaton,ou=adm,ou=PERSONNES,dc=lyon,dc=archi,dc=fr mod")
+        self.assertEqual(result["message"], "Entree uid=omaton,ou=adm,dc=test,dc=local mod")
 
     def test_05init_password(self):
         ret = self.run_backend('resetpwd.py', './files_ad_utils/resetpassword.json')
@@ -122,13 +122,13 @@ class ldapBinTest (unittest.TestCase):
         self.assertEqual(ret['returncode'], 0)
         result = json.loads(ret["stdout"])
         self.assertEqual(result["status"], 0)
-        self.assertEqual(result["message"], "user : uid=omaton,ou=adm,ou=PERSONNES,dc=lyon,dc=archi,dc=fr deleted")
+        self.assertEqual(result["message"], "user : uid=omaton,ou=adm,dc=test,dc=local deleted")
     def test_20eduperson(self):
         ret = self.run_backend('upsertidentity.py', './files_ad_utils/eduPersonTest.json')
         self.assertEqual(ret['returncode'], 0)
         result = json.loads(ret["stdout"])
         self.assertEqual(result["status"], 0)
-        self.assertEqual(result["message"], "Entree uid=omounier,ou=adm,ou=PERSONNES,dc=lyon,dc=archi,dc=fr mod")
+        self.assertEqual(result["message"], "Entree uid=xx,ou=adm,dc=test,dc=local add")
 
     def test_21lifecycle(self):
         ret =self.run_backend('lifecycle.py', './files_ad_utils/lifecycle.json')
