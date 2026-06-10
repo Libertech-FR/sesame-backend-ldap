@@ -28,9 +28,6 @@ done
 for I in $PWD/bin/*;do
   ln -s $I $INSTALL/bin
 done
-for I in $PWD/lifecycle/*;do
-  ln -s $I $INSTALL/lifecycle
-done
 chmod 700 $INSTALL/bin/*
 cp config.yml $INSTALL
 echo "Le backend a été installé dans $INSTALL"
