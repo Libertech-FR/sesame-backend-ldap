@@ -203,7 +203,21 @@ class backendLdapCase(unittest.TestCase):
         self.assertEqual(result['status'], 0)
         self.assertEqual(result['message'], "user : uid=omaton,ou=esn,dc=test,dc=local deleted")
 
-
+    def test27_add_group(self):
+        #premiere identité
+        config = u.read_config('./files_backend_utils/config1.conf')
+        ldap.set_config(config)
+        data = u.get_config()
+        l = ldap.connect_ldap(data['host'], data['dn'], data['password'])
+        entity = u.readjsonfile("./files_ad_utils/identity1.json")
+        x = ldap.upsert_entry(l, entity)
+        result = json.loads(x)
+        self.assertEqual(result['status'], 0)
+        #deuxieme identity
+        entity = u.readjsonfile("./files_ad_utils/identity2.json")
+        x = ldap.upsert_entry(l, entity)
+        result = json.loads(x)
+        self.assertEqual(result['status'], 0)
 
 if __name__ == '__main__':
     unittest.main()

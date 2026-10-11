@@ -112,7 +112,7 @@ def search_entity(l,entity):
             number=employeeNumber[0]
         else:
             number=employeeNumber
-        filter='(&(employeeNumber=' + number + ')(employeeType=' + employeeType + '))'
+        filter='(&(employeeNumber=' + str(number) + ')(employeeType=' + employeeType + '))'
     try:
         r=l.search_s(base,ldap.SCOPE_SUBTREE,filter)
         return r
@@ -332,3 +332,69 @@ def lifecycle(entity):
         lifecycle.do(entity)
 
     return(r)
+
+def add_group(l,entity):
+    members=entity['payload']['members']
+    base = u.config('base')
+    list_members=[]
+    for member in members:
+        r=l.search_s(base,ldap.SCOPE_SUBTREE,'(uid=' + member['uid'] + ')')
+        if len(r) > 0:
+            list_members.append(r[0][0])
+        else:
+            print(u.returncode(1, member['uid'] + "not found"))
+            exit(1)
+    # creation du groupe
+    object={}
+    if u.config('branchForGroup',''):
+        dn='cn='+ entity['payload']['group']['cn'] + ',' +u.config('branchForGroup')+","+base
+    else:
+        dn='cn='+ entity['payload']['group']['cn']+","+base
+    object['cn'] = entity['payload']['group']['cn']
+    object['member']=list_members
+    object['objectClass']=['top','groupofnames']
+    if entity['payload']['group']['mail'] != '':
+        object['objectClass'].append('extendedObject')
+        object['mail']=entity['payload']['group']['mail']
+    ldif=modlist.addModlist(convert_to_utf8(object))
+    try:
+        l.add_s(dn,ldif)
+        return True
+    except ldap.LDAPError as e:
+        print(u.returncode(1, format_ldap_error(e)))
+        exit(1)
+
+def del_group(l,group_entry):
+    base = u.config('base')
+    name = entity['payload']['group']['cn']
+    r = l.search_s(base, ldap.SCOPE_SUBTREE, '(cn=' + name + ')')
+    if len(r) > 0:
+        try:
+            l.delete_s(group_entry[0][0])
+            print(u.returncode(0, 'deleted'))
+        except ldap.LDAPError as e:
+            print(u.returncode(1, format_ldap_error(e)))
+            exit(1)
+
+def mod_group(l,entity,group_entry):
+    try:
+        l.delete_s(group_entry[0][0])
+    except ldap.LDAPError as e:
+        print(u.returncode(1, format_ldap_error(e)))
+        exit(1)
+    add_group(l,entity)
+    return True
+
+def do_group(l,entity):
+    #group exist ?
+    base = u.config('base')
+    name=entity['payload']['group']['cn']
+    r = l.search_s(base, ldap.SCOPE_SUBTREE, '(cn='+name+')')
+    if len(r) > 0:
+        mod_group(l,entity,r)
+        return True
+    else:
+        add_group(l,entity)
+        return True
+
+

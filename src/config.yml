@@ -29,3 +29,12 @@ actions:
   IDENTITY_LIFECYCLE_CHANGED:
     script: 'lifecycle.py'
     onError: 'stop'
+  GROUP_CREATE:
+    script: 'groups.py'
+    onError: 'continue'
+  GROUP_UPDATE:
+    script: 'groups.py'
+    onError: 'continue'
+  GROUP_DELETE:
+    script: 'groups_del.py'
+    onError: 'continue'

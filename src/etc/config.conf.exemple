@@ -14,3 +14,5 @@ disabledAttribute=sogxdisableflag
 disableValue=1
 enableValue=0
 additionnalObjectClass=sogxUser
+branchForGroup=ou=groups
+groupFamily=GENERAL,ENSEIGNEMENTS

@@ -1,0 +1,66 @@
+{
+  "concernedTo": "6acbd6c5789eb1fc364ebc9d",
+  "payload": {
+    "identity": {
+      "action": "IDENTITY_UPDATE",
+      "identity": {
+        "_id": "6acbd6c5789eb1fc364ebc9d",
+        "metadata": {
+          "createdBy": "admin",
+          "createdAt": "2026-10-11T18:34:45.685Z",
+          "lastUpdatedBy": "admin",
+          "lastUpdatedAt": "2026-10-11T18:35:15.809Z"
+        },
+        "state": 2,
+        "lifecycle": "O",
+        "dataStatus": 0,
+        "deletedFlag": false,
+        "ignoreLifecycle": false,
+        "ignoreFusion": [],
+        "inetOrgPerson": {
+          "cn": "DUPONT Jean",
+          "displayName": "Jean DUPONT",
+          "facsimileTelephoneNumber": "",
+          "givenName": "Jean",
+          "labeledURI": "",
+          "mail": "jean.dupont@test.fr",
+          "mobile": "",
+          "postalAddress": "",
+          "preferredLanguage": "",
+          "sn": "Dupont",
+          "telephoneNumber": "",
+          "title": "",
+          "uid": "jdupont",
+          "employeeNumber": [
+            46
+          ],
+          "employeeType": "LOCAL",
+          "departmentNumber": [
+            "adm"
+          ],
+          "jpegPhoto": "",
+          "userCertificate": ""
+        },
+        "additionalFields": {
+          "objectClasses": [],
+          "attributes": {},
+          "validations": {}
+        },
+        "lastBackendSync": "",
+        "lastLifecycleUpdate": "",
+        "passwordUsageExpiresAt": "",
+        "passwordUsageReminderSentDays": [],
+        "passwordUsageReminderLastSentAt": "",
+        "initState": 0,
+        "initInfo": {},
+        "srcFusionId": "",
+        "primaryEmployeeNumber": ""
+      }
+    }
+  },
+  "options": {
+    "async": true,
+    "updateStatus": true,
+    "task": "6acbd6e5789eb1fc364ebd33"
+  }
+}

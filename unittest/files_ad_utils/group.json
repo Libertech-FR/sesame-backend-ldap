@@ -1,0 +1,38 @@
+{
+  "concernedTo": "6aca0812c636ce89dc4e2009",
+  "payload": {
+    "group": {
+      "_id": "6aca0812c636ce89dc4e2009",
+      "cn": "groupe statiQUE",
+      "description": "",
+      "mail": "",
+      "family": "GENERAL",
+      "owner": []
+    },
+    "members": [
+      {
+        "_id": "67dd1e9de52d6011720ffe58",
+        "cn": "DUPONT Jean",
+        "uid": "jdupont",
+        "mail": "jdupont@test.fr",
+        "employeeType": "TAIGA",
+        "employeeNumber": "179892"
+      },
+      {
+        "_id": "68e6134cba3112ef00fbb158",
+        "cn": "MATON Olivier",
+        "uid": "omaton",
+        "mail": "omaton@test.fr",
+        "employeeType": "LOCAL",
+        "employeeNumber": "119"
+      }
+    ]
+  },
+  "options": {
+    "async": false,
+    "updateStatus": true,
+    "concernedToRef": "groups",
+    "concernedToName": "groupe statiQUE",
+    "task": "6aca9e81f0f70d6f00fe9cbb"
+  }
+}

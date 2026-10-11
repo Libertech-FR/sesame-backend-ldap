@@ -134,5 +134,8 @@ class ldapBinTest (unittest.TestCase):
         ret =self.run_backend('lifecycle.py', './files_ad_utils/lifecycle.json')
         result = json.loads(ret["stdout"])
 
+    def test_22creategroup(self):
+        ret = self.run_backend('groups.py', './files_ad_utils/group.json')
+
 if __name__ == '__main__':
     unittest.main()
