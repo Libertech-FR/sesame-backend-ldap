@@ -332,6 +332,12 @@ def lifecycle(entity):
         lifecycle.do(entity)
 
     return(r)
+def is_group_concerned(js):
+    if u.config('groupFamily', '') == '':
+        return True
+    families = [f.strip() for f in u.config('groupFamily').split(',')]
+    return js['payload']['group'].get('family', '') in families
+
 
 def add_group(l,entity):
     members=entity['payload']['members']
@@ -359,42 +365,46 @@ def add_group(l,entity):
     ldif=modlist.addModlist(convert_to_utf8(object))
     try:
         l.add_s(dn,ldif)
-        return True
+        return (u.returncode(0, 'group added or modified'))
     except ldap.LDAPError as e:
-        print(u.returncode(1, format_ldap_error(e)))
-        exit(1)
+        return (u.returncode(1, format_ldap_error(e)))
 
-def del_group(l,group_entry):
+
+def del_group(l,entity):
+    if not is_group_concerned(entity):
+        return u.returncode(0, 'not concerned')
     base = u.config('base')
     name = entity['payload']['group']['cn']
     r = l.search_s(base, ldap.SCOPE_SUBTREE, '(cn=' + name + ')')
     if len(r) > 0:
         try:
-            l.delete_s(group_entry[0][0])
-            print(u.returncode(0, 'deleted'))
+            l.delete_s(r[0][0])
+            return u.returncode(0, 'deleted')
         except ldap.LDAPError as e:
-            print(u.returncode(1, format_ldap_error(e)))
-            exit(1)
+            return u.returncode(1, format_ldap_error(e))
+    else:
+        return (u.returncode(1, 'Group not found'))
 
 def mod_group(l,entity,group_entry):
     try:
         l.delete_s(group_entry[0][0])
     except ldap.LDAPError as e:
-        print(u.returncode(1, format_ldap_error(e)))
-        exit(1)
-    add_group(l,entity)
-    return True
+        return u.returncode(1, format_ldap_error(e))
+    return add_group(l,entity)
 
 def do_group(l,entity):
+    #concerned ?
+    if not is_group_concerned(entity):
+        return u.returncode(0, 'not concerned')
     #group exist ?
     base = u.config('base')
     name=entity['payload']['group']['cn']
     r = l.search_s(base, ldap.SCOPE_SUBTREE, '(cn='+name+')')
     if len(r) > 0:
-        mod_group(l,entity,r)
-        return True
+        x=mod_group(l,entity,r)
+        return x
     else:
-        add_group(l,entity)
-        return True
+        x=add_group(l,entity)
+        return x
 
 

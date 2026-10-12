@@ -133,9 +133,15 @@ class ldapBinTest (unittest.TestCase):
     def test_21lifecycle(self):
         ret =self.run_backend('lifecycle.py', './files_ad_utils/lifecycle.json')
         result = json.loads(ret["stdout"])
-
+        self.assertEqual(result["status"], 0)
     def test_22creategroup(self):
         ret = self.run_backend('groups.py', './files_ad_utils/group.json')
+        result = json.loads(ret["stdout"])
+        self.assertEqual(result["status"], 0)
+    def test_23deletegroup(self):
+        ret = self.run_backend('groups_del.py', './files_ad_utils/group.json')
+        result = json.loads(ret["stdout"])
+        self.assertEqual(result["status"], 0)
 
 if __name__ == '__main__':
     unittest.main()

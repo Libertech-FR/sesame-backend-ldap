@@ -218,6 +218,63 @@ class backendLdapCase(unittest.TestCase):
         x = ldap.upsert_entry(l, entity)
         result = json.loads(x)
         self.assertEqual(result['status'], 0)
+        # creation du groupe dans parametre branchForGroup ni groupFamily
+        entity = u.readjsonfile("./files_ad_utils/group.json")
+        x=ldap.do_group(l, entity)
+        result = json.loads(x)
+        self.assertEqual(result['status'], 0)
 
+    def test28_delete_group(self):
+        config = u.read_config('./files_backend_utils/config1.conf')
+        ldap.set_config(config)
+        data = u.get_config()
+        l = ldap.connect_ldap(data['host'], data['dn'], data['password'])
+        entity = u.readjsonfile("./files_ad_utils/group.json")
+        x=ldap.del_group(l, entity)
+        result = json.loads(x)
+        self.assertEqual(result['status'], 0)
+
+    def test29_delete_group_not_exists(self):
+        config = u.read_config('./files_backend_utils/config1.conf')
+        ldap.set_config(config)
+        data = u.get_config()
+        l = ldap.connect_ldap(data['host'], data['dn'], data['password'])
+        entity = u.readjsonfile("./files_ad_utils/group.json")
+        x=ldap.del_group(l, entity)
+        result = json.loads(x)
+        self.assertEqual(result['status'], 1)
+    def test30_group_not_concerned(self):
+        config = u.read_config('./files_backend_utils/config3.conf')
+        ldap.set_config(config)
+        data = u.get_config()
+        l = ldap.connect_ldap(data['host'], data['dn'], data['password'])
+        entity = u.readjsonfile("./files_ad_utils/group.json")
+        x = ldap.do_group(l, entity)
+        result = json.loads(x)
+        self.assertEqual(result['status'], 0)
+        self.assertEqual(result['message'], "not concerned")
+
+    def test31_group_del_not_concerned(self):
+        config = u.read_config('./files_backend_utils/config3.conf')
+        ldap.set_config(config)
+        data = u.get_config()
+        l = ldap.connect_ldap(data['host'], data['dn'], data['password'])
+        entity = u.readjsonfile("./files_ad_utils/group.json")
+        x = ldap.del_group(l, entity)
+        result = json.loads(x)
+        self.assertEqual(result['status'], 0)
+        self.assertEqual(result['message'], "not concerned")
+
+    def test32_group_u_in_family(self):
+        config = u.read_config('./files_backend_utils/config3.conf')
+        ldap.set_config(config)
+        data = u.get_config()
+        l = ldap.connect_ldap(data['host'], data['dn'], data['password'])
+        entity = u.readjsonfile("./files_ad_utils/group.json")
+        entity['payload']['group']['family'] = 'XXXXXX'
+        x = ldap.do_group(l, entity)
+        result = json.loads(x)
+        self.assertEqual(result['status'], 0)
 if __name__ == '__main__':
     unittest.main()
+

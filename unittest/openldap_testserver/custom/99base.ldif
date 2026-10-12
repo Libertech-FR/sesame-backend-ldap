@@ -33,3 +33,9 @@ changeType: add
 ou: bconctionnelle
 objectClass: organizationalUnit
 objectClass: top
+
+dn: ou=groupes,dc=test,dc=local
+changeType: add
+ou: groupes
+objectClass: organizationalUnit
+objectClass: top
