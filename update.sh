@@ -47,7 +47,7 @@ for DIR in "${INSTALLDIR}"/*; do
     OK=$?
     if [ $OK -eq 1 ];then
       echo "Update for lifecycle"
-      echo -e "  IDENTITY_LIFECYCLE_CHANGED:\n    script: 'lifecycle.py'\n     onError: 'stop'" >>${DIR}/config.yml
+      echo -e "  IDENTITY_LIFECYCLE_CHANGED:\n    script: 'lifecycle.py'\n    onError: 'stop'" >>${DIR}/config.yml
     fi
     grep 'GROUP_CREATE:' ${DIR}/config.yml >/dev/null
     OK=$?
