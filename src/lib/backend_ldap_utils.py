@@ -348,7 +348,7 @@ def add_group(l,entity):
         if len(r) > 0:
             list_members.append(r[0][0])
         else:
-            print(u.returncode(1, member['uid'] + "not found"))
+            print(u.returncode(1, "member : " + member['uid'] + " not found"))
             exit(1)
     # creation du groupe
     object={}
