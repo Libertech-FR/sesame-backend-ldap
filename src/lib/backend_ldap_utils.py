@@ -360,7 +360,7 @@ def add_group(l,entity):
     object['member']=list_members
     object['objectClass']=['top','groupofnames']
     if entity['payload']['group']['mail'] != '':
-        object['objectClass'].append('extendedObject')
+        object['objectClass'].append('extensibleObject')
         object['mail']=entity['payload']['group']['mail']
     ldif=modlist.addModlist(convert_to_utf8(object))
     try:
