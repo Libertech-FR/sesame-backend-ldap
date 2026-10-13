@@ -28,7 +28,6 @@ for DIR in "${INSTALLDIR}"/*; do
   if [[ "${TYPE}" == "openldap" ]]; then
     echo "${DIR} is openldap"
     # maj config.yml
-    cp "${MODULE_DIR}"/config.yml "${DIR}"
     mkdir -p "${DIR}/lib" "${DIR}/bin" "${DIR}/lifecycle"
 
     for I in "${MODULE_DIR}"/lib/*; do
@@ -43,6 +42,20 @@ for DIR in "${INSTALLDIR}"/*; do
       [[ -f "${I}" ]] || continue
       ln -sf "${I}" "${DIR}/bin/"
     done
-
+    # update config.yml
+    grep 'IDENTITY_LIFECYCLE_CHANGED:' ${DIR}/config.yml >/dev/null
+    OK=$?
+    if [ $OK -eq 1 ];then
+      echo "Update for lifecycle"
+      echo -e "  IDENTITY_LIFECYCLE_CHANGED:\n    script: 'lifecycle.py'\n     onError: 'stop'" >>${DIR}/config.yml
+    fi
+    grep 'GROUP_CREATE:' ${DIR}/config.yml >/dev/null
+    OK=$?
+    if [ $OK -eq 1 ];then
+      echo "Update for groups"
+      echo -e "  GROUP_CREATE:\n    script: 'groups.py'\n    onError: 'continue'" >>${DIR}/config.yml
+      echo -e "  GROUP_UPDATE:\n    script: 'groups.py'\n    onError: 'continue'" >>${DIR}/config.yml
+      echo -e "  GROUP_DELETE:\n    script: 'groups_del.py'\n    onError: 'continue'" >>${DIR}/config.yml
+    fi
   fi
 done
